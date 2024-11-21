@@ -5,7 +5,7 @@
 1. **Clone repo**
 
    ```bash
-   git clone [https://github.com/Habiboys/Web-Pendaftaran-Semester-Pendek](https://github.com/VioniWijaya/ProjekPPSI)
+   git clone https://github.com/VioniWijaya/ProjekPPSI
    ```
 
 2. **Cd ke folder project**
