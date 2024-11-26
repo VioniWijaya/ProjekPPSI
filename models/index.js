@@ -1,14 +1,35 @@
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 
+// Di awal models/index.js
+console.log('Environment variables:', {
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  host: process.env.DB_HOST
+});
+
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+const sequelize = new Sequelize(
+  process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, 
+  {
   host: process.env.DB_HOST,
   dialect: 'mysql',
+  logging: console.log
 });
 
 const db = {};
+
+// Test koneksi
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

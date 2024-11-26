@@ -1,13 +1,25 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('./models'); // Import Sequelize setup
-
+const path = require('path'); 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const cookieParser = require("cookie-parser");
+const logger = require('morgan');
+const PORT = process.env.PORT || 5000;
+
+const authRouter = require("./routes/authRoute");
+
+//View Engine setup
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 
 // Middleware
+app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
 // Sinkronisasi database
 db.sequelize.sync({ alter: true }).then(() => {
@@ -16,12 +28,36 @@ db.sequelize.sync({ alter: true }).then(() => {
   console.error('Error creating database tables:', error);
 });
 
-// Routes (contoh)
+// Routes
+app.use("/auth", authRouter);
 app.get('/', (req, res) => {
-  res.send('Server is running!');
+  res.render('login');
 });
 
-// Mulai server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).render('error', {
+      message: err.message, // Kirim pesan kesalahan
+      error: err // Kirim objek kesalahan
+  });
 });
+
+module.exports = app;
+
+// // Routes (contoh)
+// // app.get('/', (req, res) => {
+// //   res.send('Server is running!');
+// // });
+// app.get("/", authRouter);
+
+// app.get("*", (req, res) => {
+//   res.status(404).render("notfound");
+// });
+
+// // Mulai server
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+// module.exports = app; 
