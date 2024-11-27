@@ -46,9 +46,9 @@
 
 7. **Jalankan Express dan tailwind di 2 terminal berbeda dengan perintah**
 
-   ```bash
-  npm run tail
-  npm run dev
+    ```bash
+   npm run tail
+   npm run dev
    ```
 
 8. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
