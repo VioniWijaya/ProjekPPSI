@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
     const Dinas = sequelize.define('Dinas', {
       id_dinas: {
-        type: DataTypes.CHAR(10),
+        type: DataTypes.STRING(10),
         primaryKey: true,
       },
       id_user: {
-        type: DataTypes.CHAR(10),
+        type: DataTypes.STRING(10),
         allowNull: false,
       },
       nama_dinas: {
