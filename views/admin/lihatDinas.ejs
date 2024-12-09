@@ -1,0 +1,30 @@
+<%- include('sidebar')%>
+<a href="/admin/tambahDinas" class="btn btn-sm btn-primary mt-4">+ Tambah</a>
+<div class="overflow-x-auto mt-4">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Nama Dinas</th>
+        <th>Deskripsi</th>
+        <th>Kepala Dinas</th>
+        <th>Password</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="flex justify-between">
+            <a href="/admin/edit-matkul/" class="btn btn-sm btn-warning mr-2">Edit</a>
+            <label for="delete-modal-" class="btn btn-sm btn-error modal-button">Hapus</label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%- include('footer')%>
