@@ -1,100 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Program Kerja</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-
-    <!-- Sidebar -->
-    <div class="flex h-screen">
-        <div class="w-1/5 bg-cyan-100 text-blue-800 flex flex-col">
-            <div class="px-4 py-6">
-                <h1 class="text-xl font-bold">BEM KM FTI UNAND</h1>
-            </div>
-            <nav class="mt-8">
-                <a href="#" class="block py-2 px-4 hover:bg-blue-700">Beranda</a>
-                <a href="#" class="block py-2 px-4 bg-cyan-400">Program Kerja</a>
-                <a href="#" class="block py-2 px-4 hover:bg-blue-700">Progres</a>
-                <a href="#" class="block py-2 px-4 hover:bg-blue-700">Profil</a>
-            </nav>
-            <div class="mt-auto px-4 py-6">
-                <a href="#" class="flex items-center space-x-2 hover:text-gray-300">
-                    <span>&#x21B6;</span>
-                    <span>Log Out</span>
-                </a>
-            </div>
+<%- include('../admin/sidebar')%>
+    <!-- Content -->
+    <div class="px-8 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-blue-800">Daftar Program Kerja</h3>
+            <a href="proker/create" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+                <span class="text-lg font-semibold">+</span>
+            </a>
         </div>
 
-        <!-- Main Content -->
-        <div class="w-4/5 bg-white">
-            <!-- Header -->
-            <header class="flex items-center justify-between px-8 py-4 bg-blue-900">
-                <h2 class="text-2xl font-semibold text-white">Program Kerja</h2>
-                <div class="flex items-center space-x-6">
-                    <a href="#" class="text-white hover:text-blue-600">FAQ</a>
-                    <a href="#" class="text-white hover:text-blue-600">Kontak</a>
-                    <a href="#" class="text-white hover:text-blue-600">
-                        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17.8896 36.1678C18.0872 36.8409 18.4975 37.4319 19.0591 37.8523C19.6206 38.2727 20.3033 38.5 21.0048 38.5C21.7063 38.5 22.3889 38.2727 22.9504 37.8523C23.512 37.4319 23.9223 36.8409 24.1199 36.1678" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M21 7.00013V3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M21.0005 7.00012C24.0948 7.00012 27.0624 8.22933 29.2504 10.4173C31.4384 12.6053 32.6676 15.5729 32.6676 18.6672C32.6676 29.6281 35.0011 31.501 35.0011 31.501H7C7 31.501 9.33342 28.5205 9.33342 18.6672C9.33342 15.5729 10.5626 12.6053 12.7506 10.4173C14.9386 8.22933 17.9062 7.00012 21.0005 7.00012V7.00012Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>                              
-                    </a>
-                    <a href="#" class="text-white hover:text-blue-600">
-                        <svg width="50" height="45" viewBox="0 0 50 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.417 23.9243C10.417 21.3785 10.417 20.1056 10.9888 18.9867C11.5606 17.8678 12.6344 17.0394 14.7821 15.3826L16.8654 13.7755C20.7473 10.7809 22.6883 9.28357 25.0003 9.28357C27.3124 9.28357 29.2533 10.7809 33.1352 13.7755L35.2186 15.3826C37.3662 17.0394 38.4401 17.8678 39.0119 18.9867C39.5837 20.1056 39.5837 21.3785 39.5837 23.9243V31.875C39.5837 35.4105 39.5837 37.1783 38.3633 38.2767C37.1429 39.375 35.1787 39.375 31.2503 39.375H18.7503C14.822 39.375 12.8578 39.375 11.6374 38.2767C10.417 37.1783 10.417 35.4105 10.417 31.875V23.9243Z" stroke="white" stroke-width="2"/>
-                            <path d="M30.2087 39.375V29.125C30.2087 28.5727 29.7609 28.125 29.2087 28.125H20.792C20.2397 28.125 19.792 28.5727 19.792 29.125V39.375" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>                               
-                    </a>
-                </div>
-            </header>
-
-            <!-- Content -->
-            <div class="px-8 py-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-blue-800">Daftar Program Kerja</h3>
-                    <a href="proker/add" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
-                        <span class="text-lg font-semibold">+</span>
-                    </a>
-                </div>
-
-                <!-- List -->
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
-                        <span class="text-blue-800 font-medium">Nama Proker</span>
-                        <div>
-                            <a class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
-                            <a class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
-                        <span class="text-blue-800 font-medium">Nama Proker</span>
-                        <div>
-                            <a class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
-                            <a class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
-                        <span class="text-blue-800 font-medium">Nama Proker</span>
-                        <div>
-                            <a class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
-                            <a class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
-                        <span class="text-blue-800 font-medium">Nama Proker</span>
-                        <div>
-                            <a class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
-                            <a class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
-                        </div>
+        <!-- List -->
+        <div class="space-y-4">
+            <!-- Populate proker var -->
+            <% proker.forEach(proker => { %>
+                <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
+                    <span class="text-blue-800 font-medium"><%= proker.nama_proker %></span>
+                    <div>
+                        <a href="/proker/edit/<%= proker.id_proker %>" class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
+                        <a href="/proker/view/<%= proker.id_proker %>" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
                     </div>
                 </div>
-            </div>
+            <% }) %>
         </div>
     </div>
-
-</body>
-</html>
+</div>
+<%- include('../admin/footer.ejs')%>

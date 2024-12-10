@@ -1,0 +1,61 @@
+<%- include('../admin/sidebar')%>
+<div class="px-8 py-6 bg-white">
+    <form method="post" action="/proker/edit/<%= proker.id_proker %>">
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Nama Program Kerja</span>
+            </label>
+            <input type="text" placeholder="Nama Program Kerja" class="input input-bordered" name="nama_proker" value="<%= proker.nama_proker %>" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Penanggung Jawab</span>
+            </label>
+            <input type="text" placeholder="Penanggung Jawab" class="input input-bordered" name="pj_proker" value="<%= proker.pj_proker %>" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Bentuk Kegiatan</span>
+            </label>
+            <input type="text" placeholder="Bentuk Kegiatan" class="input input-bordered" name="kegiatan" value="<%= proker.kegiatan %>" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Tujuan</span>
+            </label>
+            <input type="text" placeholder="Tujuan" class="input input-bordered" name="tujuan" value="<%= proker.tujuan %>" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Sasaran Kegiatan</span>
+            </label>
+            <input type="text" placeholder="Sasaran Kegiatan" class="input input-bordered" name="sasaran" value="<%= proker.sasaran %>" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Waktu Pelaksanaan</span>
+            </label>
+            <input type="text" placeholder="Waktu Pelaksanaan" class="input input-bordered" name="target_waktu" value="<%= proker.target_waktu %>" />
+        </div>
+        <div class="form-control grid grid-cols-2">
+            <div>
+                <label class="label">
+                    <span class="label-text">Tempat</span>
+                </label>
+                <input type="text" placeholder="Tempat" class="input input-bordered w-4/6" name="tempat" value="<%= proker.tempat %>" />
+            </div>
+            <div>
+                <label class="label">
+                    <span class="label-text">Anggaran Dana</span>
+                </label>
+                <input type="text" placeholder="Anggaran Dana" class="input input-bordered w-4/6" name="anggaran" value="<%= proker.anggaran %>" />
+            </div>
+        </div>
+
+        <div class="form-control mt-7">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+    </form>
+</div>
+
+<%- include('../admin/footer')%>
