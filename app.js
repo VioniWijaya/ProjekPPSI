@@ -7,8 +7,8 @@ const cookieParser = require("cookie-parser");
 const logger = require('morgan');
 const PORT = process.env.PORT || 5000;
 
-const authRouter = require("./routes/authRoute");
-const adminRouter = require("./routes/adminRoute");
+// const authRouter = require("./routes/authRoute");
+const router = require('./routes');
 
 //View Engine setup
 app.set("view engine", "ejs");
@@ -30,8 +30,7 @@ db.sequelize.sync({ alter: true }).then(() => {
 });
 
 // Routes
-app.use("/auth", authRouter);
-app.use("/admin", adminRouter);
+app.use("/", router);
 app.get('/', (req, res) => {
   res.render('login');
 });
@@ -46,3 +45,20 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+// // Routes (contoh)
+// // app.get('/', (req, res) => {
+// //   res.send('Server is running!');
+// // });
+// app.get("/", authRouter);
+
+// app.get("*", (req, res) => {
+//   res.status(404).render("notfound");
+// });
+
+// // Mulai server
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+// module.exports = app; 
