@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
-      pi_proker: {
+      pj_proker: {
         type: Sequelize.STRING(100),
         allowNull: false,
       },
