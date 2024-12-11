@@ -1,34 +1,71 @@
-<%- include('sidebar')%>
-<h2 class="card-title">Progres</h2>
+<%- include('sidebar') %>
+<h2 class="card-title">Progres Proker</h2>
 
-<div class="grid grid-cols-4 gap-4">
-    <div class="relative inline-block">
-        <select class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option>Pilih Bulan</option>
-          <option>Januari</option>
-          <option>Febuari</option>
-          <option>Maret</option>
-          <option>April</option>
-          <option>Mei</option>
-          <option>Juni</option>
-          <option>Juli</option>
-          <option>Agustus</option>
-          <option>September</option>
-          <option>Oktober</option>
-          <option>November</option>
-          <option>Desember</option>
-        </select>
-        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M5.292 7.292a1 1 0 011.415 0L10 10.586l3.293-3.294a1 1 0 011.415 1.415l-4 4a1 1 0 01-1.415 0l-4-4a1 1 0 010-1.415z" clip-rule="evenodd" />
-          </svg>
-        </div>
-      </div>
-      
-    <!-- ... -->
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Lihat
-      </button>
-      
+<!-- Dropdown for selecting month -->
+<form id="filterForm" class="grid grid-cols-4 gap-4">
+  <div class="relative inline-block">
+    <select name="bulan" id="bulanSelect"
+      class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <option value="">Pilih Bulan</option>
+      <option value="01">Januari</option>
+      <option value="02">Februari</option>
+      <option value="03">Maret</option>
+      <option value="04">April</option>
+      <option value="05">Mei</option>
+      <option value="06">Juni</option>
+      <option value="07">Juli</option>
+      <option value="08">Agustus</option>
+      <option value="09">September</option>
+      <option value="10">Oktober</option>
+      <option value="11">November</option>
+      <option value="12">Desember</option>
+    </select>
   </div>
-<%- include('footer')%>
+
+  <button type="button" id="filterButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Lihat
+  </button>
+</form>
+
+<!-- Container for dynamically added cards -->
+<div id="cardContainer" class="mt-4 space-y-4">
+  <% progres.forEach((progres) => { 
+        // Pastikan waktu_pelaksanaan adalah Date object
+        const waktuPelaksanaan = new Date(progres.waktu_pelaksanaan);
+    %>
+  <div class="progres-card bg-blue-100 p-4 rounded-lg shadow-md flex justify-between items-center"
+    data-bulan="<%= waktuPelaksanaan.getMonth() + 1 %>" <!-- Store month as data attribute -->
+    data-tahun="<%= waktuPelaksanaan.getFullYear() %>">
+    <div>
+      <!-- Display Proker Name and Dinas Name -->
+      <h3 class="font-bold text-lg"><%= progres.dataProker.nama_proker %></h3>
+      <p class="text-gray-600">Dinas: <%= progres.dataProker.dataDinas.nama_dinas %></p>
+      <p class="text-gray-600">Tanggal: <%= waktuPelaksanaan.toDateString() %></p>
+    </div>
+
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Lihat
+    </button>
+  </div>
+  <% }) %>
+</div>
+
+<script>
+  document.getElementById('filterButton').addEventListener('click', function () {
+    const selectedMonth = document.getElementById('bulanSelect').value;
+    const cardContainer = document.getElementById('cardContainer');
+    const cards = document.querySelectorAll('.progres-card');
+
+    // Loop through each card and show/hide based on the selected month
+    cards.forEach(card => {
+      const cardMonth = card.getAttribute('data-bulan').padStart(2, '0'); // Format to two digits
+      if (selectedMonth === '' || cardMonth === selectedMonth) {
+        card.style.display = 'block'; // Show card if it matches the selected month
+      } else {
+        card.style.display = 'none'; // Hide card if it doesn't match
+      }
+    });
+  });
+</script>
+
+<%- include('footer') %>

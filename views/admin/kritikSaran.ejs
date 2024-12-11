@@ -1,6 +1,16 @@
 <%- include('sidebar')%>
 <h2 class="card-title">Kritik dan Saran</h2>
 
+<% if (success) { %>
+<div class="bg-green-500 text-white p-3 rounded mb-4">
+  <p><%= success %></p>
+</div>
+<% } %>
+<% if (error) { %>
+<div class="bg-red-500 text-white p-3 rounded mb-4">
+  <p><%= error %></p>
+</div>
+<% } %>
 <a href="/admin/tambahKritikSaran" class="btn btn-sm btn-primary mt-4">+ Tambah</a>
 <div class="overflow-x-auto mt-4">
   <table class="table w-full">
@@ -8,25 +18,51 @@
       <tr>
         <th>Program Kerja</th>
         <th>Dinas</th>
+        <th>Progres</th>
         <th>Kritik Saran</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
+      <% if (kritik_saran.length > 0) { %>
+      <% kritik_saran.forEach(function(item) { %>
       <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        
+        <td><%= item.dataProgres.dataProker.nama_proker %></td>
+        <td><%= item.dataProgres.dataProker.dataDinas.nama_dinas %></td>
+        <td><%= item.dataProgres.id_progres %></td>
+        <td><%= item.isi %></td>
         <td>
           <div class="flex justify-between">
-            <a href="/admin/edit-matkul/" class="btn btn-sm btn-warning mr-2">Edit</a>
-            <label for="delete-modal-" class="btn btn-sm btn-error modal-button">Hapus</label>
+            <a href="/admin/editKritikSaran/<%= item.id_kritikdansaran %>" class="btn btn-sm btn-warning mr-2">Edit</a>
+            <label for="delete-modal-<%= item.id_kritikdansaran %>"
+              class="btn btn-sm btn-error modal-button">Hapus</label>
           </div>
         </td>
       </tr>
+      <% }); %>
+      <% } else { %>
+      <tr>
+        <td colspan="5" class="text-center">Tidak ada data kritik_saran yang tersedia.</td>
+      </tr>
+      <% } %>
     </tbody>
   </table>
 </div>
 
+<% kritik_saran.forEach(item => { %>
+<input type="checkbox" id="delete-modal-<%= item.id_kritikdansaran %>" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
+    <p>Apakah Anda yakin ingin menghapus kritik_saran <%= item.id_kritikdansaran %>?</p>
+    <p>Semua data yang berhubungan dengan kritik_saran ini akan ikut terhapus.</p>
+    <div class="modal-action">
+      <form action="/admin/hapusKritikSaran/<%= item.id_kritikdansaran %>" method="post">
+        <button type="submit" class="btn btn-error">Ya, Hapus</button>
+      </form>
+      <label for="delete-modal-<%= item.id_kritikdansaran %>" class="btn">Batal</label>
+    </div>
+  </div>
+</div>
+<% }) %>
 <%- include('footer')%>

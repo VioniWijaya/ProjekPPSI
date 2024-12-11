@@ -7,6 +7,10 @@ const sequelize = require('../config/db')
         type: DataTypes.CHAR(10),
         primaryKey: true,
       },
+      id_progres: {
+        type: DataTypes.STRING(10),
+        allowNull: false,
+      },
       isi: {
         type: DataTypes.STRING(200),
         allowNull: false,
@@ -31,4 +35,3 @@ const sequelize = require('../config/db')
     });
   
 module.exports=kritik_saran;
-  

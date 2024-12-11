@@ -15,10 +15,6 @@ const sequelize = require('../config/db')
       type: DataTypes.STRING(50),
       allowNull: false,
     },
-    pj_proker: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
     kegiatan: {
       type: DataTypes.STRING(200),
       allowNull: false,
@@ -32,7 +28,7 @@ const sequelize = require('../config/db')
       allowNull: false,
     },
     target_waktu: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.DATE,
       allowNull: false,
     },
     tempat: {
