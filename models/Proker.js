@@ -1,7 +1,7 @@
 const {
   DataTypes
 } = require('sequelize')
-const sequelize = require('../config/config')
+const sequelize = require('../config/db')
   const proker = sequelize.define('proker', {
     id_proker: {
       type: DataTypes.STRING(10),
@@ -13,10 +13,6 @@ const sequelize = require('../config/config')
     },
     nama_proker: {
       type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    pj_proker: {
-      type: DataTypes.STRING(100),
       allowNull: false,
     },
     kegiatan: {
@@ -32,7 +28,7 @@ const sequelize = require('../config/config')
       allowNull: false,
     },
     target_waktu: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.DATE,
       allowNull: false,
     },
     tempat: {

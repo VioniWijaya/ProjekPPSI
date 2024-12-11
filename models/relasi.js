@@ -4,7 +4,7 @@ const proker = require('./Proker');
 const dinas = require('./Dinas');
 const user = require('./User');
 const progres = require('./Progres');
-const kritik_saran = require('./kritik_saran');
+const kritik_saran = require('./KritikSaran');
 const notifikasi = require('./Notifikasi');
 
 anggota.belongsToMany(proker, { through: anggota_proker, foreignKey: 'id_anggota', as: 'dataProker' });

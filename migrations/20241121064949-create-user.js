@@ -10,7 +10,7 @@ module.exports = {
         allowNull: false,
       },
       password: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(256),
         allowNull: false,
       },
       role: {

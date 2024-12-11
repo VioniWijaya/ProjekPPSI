@@ -1,33 +1,33 @@
 var express = require('express');
 var router = express.Router();
+const islogin = require('../middleware/islogin.middleware')
+const controllerDinas = require('../controller/kelolaDinasController')
+const controllerKritikSaran = require('../controller/kelolaKritikSaranController')
 
 
-router.get('/tambahDinas', (req, res) => {
+router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => {
     res.render('admin/tambahDinas'); // Pastikan ini sesuai dengan nama file
   });
 
-  router.get('/lihatDinas', (req, res) => {
-    res.render('admin/lihatDinas'); // Pastikan ini sesuai dengan nama file
-  });
+  router.get('/lihatDinas',islogin.verifyTokenAndRole(['admin']), controllerDinas.lihatDinas);
 
-  router.get('/editDinas', (req, res) => {
-    res.render('admin/editDinas'); // Pastikan ini sesuai dengan nama file
-  });
-  router.get('/lihatProgres', (req, res) => {
-    res.render('admin/lihatProgres'); // Pastikan ini sesuai dengan nama file
-  });
+  router.get('/editDinas/:id',islogin.verifyTokenAndRole(['admin']), controllerDinas.editDinas);
+  router.get('/lihatProgres',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.lihatProgres);
 
-  router.get('/kritikSaran', (req, res) => {
-    res.render('admin/kritikSaran'); // Pastikan ini sesuai dengan nama file
-  });
+  router.get('/kritikSaran',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.lihatKritikSaran);
 
-  router.get('/tambahkritikSaran', (req, res) => {
-    res.render('admin/tambahKritikSaran'); // Pastikan ini sesuai dengan nama file
-  });
+  router.get('/tambahkritikSaran',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.viewTambahKritikSaran);
+  router.post('/tambahkritikSaran',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.tambahKritikSaran);
 
-  router.get('/editkritikSaran', (req, res) => {
-    res.render('admin/editKritikSaran'); // Pastikan ini sesuai dengan nama file
-  });
+  router.get('/editkritikSaran/:id',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.getEditKritikSaran);
+  router.post('/editKritikSaran/:id',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.postEditKritikSaran);
 
-  
+  router.post('/hapusKritikSaran/:id', islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.hapusKritikSaran);
+  router.get('/progres/:idProker', islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.progresbyproker);
+  router.get('/proker/:idDinas', islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.prokerbydinas);
+
+router.post('/tambahDinas', islogin.verifyTokenAndRole(['admin']), controllerDinas.tambahDinas);
+router.post('/editDinas/:id', islogin.verifyTokenAndRole(['admin']), controllerDinas.updateDinas);
+router.post('/hapusDinas/:id', islogin.verifyTokenAndRole(['admin']), controllerDinas.hapusDinas);
+
 module.exports = router;

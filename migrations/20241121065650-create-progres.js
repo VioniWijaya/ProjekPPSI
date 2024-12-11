@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
       },
       waktu_pelaksanaan: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.DATE,
         allowNull: false,
       },
       kendala: {
