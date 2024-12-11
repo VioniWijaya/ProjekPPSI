@@ -31,6 +31,13 @@ const create = async (req, res) => {
         console.error(error.message);
     }
 }
+const notifikasi = async (req, res) => {
+    try {
+        res.render('dinas/proker/notifikasi');
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 
 const store = async (req, res) => {
     const {
@@ -129,5 +136,6 @@ module.exports = {
     create,
     store,
     edit,
-    update
+    update,
+    notifikasi
 }

@@ -5,6 +5,7 @@ const { prokerController } = require('../controller');
 
 router.get('/', prokerController.index);
 router.get('/create', prokerController.create);
+router.get('/notifikasi', prokerController.notifikasi);
 router.post('/create', prokerController.store);
 router.get('/edit/:id', prokerController.edit);
 router.post('/edit/:id', prokerController.update);
