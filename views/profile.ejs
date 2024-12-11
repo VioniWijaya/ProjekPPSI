@@ -5,7 +5,7 @@
             <label class="label">
                 <span class="label-text">Username</span>
             </label>
-            <input type="text" placeholder="Username" class="input input-bordered" name="username" value="<%= dinas.User.username %>" required />
+            <input type="text" placeholder="Username" class="input input-bordered" name="username" value="<%= dinas.dataUser.username %>" required />
         </div>
         <div class="form-control">
             <label class="label">
@@ -18,9 +18,9 @@
                 <span class="label-text">Jabatan</span>
             </label>
             <select name="role" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                <option value="" disabled <%= dinas.User.role ? '' : 'selected' %>>Pilih Jabatan</option>
-                <option value="admin" <%= dinas.User.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                <option value="user" <%= dinas.User.role === 'user' ? 'selected' : '' %>>User</option>
+                <option value="" disabled <%= dinas.dataUser.role ? '' : 'selected' %>>Pilih Jabatan</option>
+                <option value="admin" <%= dinas.dataUser.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                <option value="user" <%= dinas.dataUser.role === 'user' ? 'selected' : '' %>>User</option>
             </select>
         </div>
         <div class="form-control">

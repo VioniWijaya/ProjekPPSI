@@ -36,6 +36,16 @@
         </label>
         <input type="text" disabled placeholder="Waktu Pelaksanaan" class="input input-bordered" name="target_waktu" value="<%= proker.target_waktu %>" />
     </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Status</span>
+        </label>
+        <select name="status" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+            <option value="belum terlaksana" <%= proker.status === 'belum terlaksana' ? 'selected' : '' %>>Belum Terlaksana</option>
+            <option value="berjalan" <%= proker.status === 'berjalan' ? 'selected' : '' %>>Berjalan</option>
+            <option value="terlaksana" <%= proker.status === 'terlaksana' ? 'selected' : '' %>>Terlaksana</option>
+        </select>
+    </div>
     <div class="form-control grid grid-cols-2">
         <div>
             <label class="label">
