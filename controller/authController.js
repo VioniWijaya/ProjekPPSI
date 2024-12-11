@@ -98,7 +98,7 @@ function getRedirectUrl(role) {
         case "admin":
             return "/admin/lihatDinas";
         case "dinas":
-            return "/dinas/layout/dashboard";
+            return "/dinas";
         default:
             return "/";
     }
