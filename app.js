@@ -32,9 +32,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", router);
-app.get('/', (req, res) => {
-  res.render('login');
-});
+// app.get('/', (req, res) => {
+//   res.render('login');
+// });
 
 // Error handler
 app.use((err, req, res, next) => {

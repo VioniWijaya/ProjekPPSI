@@ -1,33 +1,42 @@
-// const jwt = require('jsonwebtoken');
-// require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
-// function isLogin(req, res, next) {
-//   const token = req.cookies.token;
+// Middleware untuk memeriksa token dan role
+const verifyTokenAndRole = (allowedRoles) => {
+    return (req, res, next) => {
+        const token = req.cookies.token;
+        
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Token tidak ditemukan, silakan login terlebih dahulu.',
+            });
+        }
 
-//   if (!token) {
-//     return next();
-//   }
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
 
-//   jwt.verify(token, process.env.JWT_SECRET_TOKEN, function(err, decoded) {
-//     if (err) {
-//       res.clearCookie('token');
-//       return next();
-//     }
+            req.user = decoded; // Menyimpan informasi user ke dalam request object
 
-//     req.userId = decoded.id;
-//     req.userRole = decoded.role;
-//     req.userName = decoded.username;
+            if (!allowedRoles.includes(decoded.role)) {
+                console.log("role anda", decoded.role);
+                
+                return res.status(403).json({
+                    success: false,
+                    message: 'Anda tidak memiliki akses ke halaman ini.',
+                });
+            }
 
-//     if (req.userRole == "admin") {
-//       return res.redirect("/home");
-//     }
-//     //  else if (req.userRole == "dinas") {
-//     //   return res.redirect("/dinas/dashboard");
-//     // } 
-    
+            next(); // Lanjut ke middleware atau handler berikutnya
+        } catch (err) {
+            console.error("Token verification error: ", err);
+            return res.status(403).json({
+                success: false,
+                message: 'Token tidak valid atau telah kedaluwarsa.',
+            });
+        }
+    };
+};
 
-//     next();
-//   });
-// }
-
-// module.exports = isLogin;
+module.exports = {
+    verifyTokenAndRole,
+};
