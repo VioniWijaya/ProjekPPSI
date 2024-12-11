@@ -1,32 +1,70 @@
 <%- include('sidebar')%>
 <h2 class="card-title">Dinas</h2>
 <a href="/admin/tambahDinas" class="btn btn-sm btn-primary mt-4">+ Tambah</a>
+
+<% if (success) { %>
+  <div class="bg-green-500 text-white p-3 rounded mb-4">
+    <p><%= success %></p>
+  </div>
+<% } %>
+<% if (error) { %>
+  <div class="bg-red-500 text-white p-3 rounded mb-4">
+    <p><%= error %></p>
+  </div>
+<% } %>
+
 <div class="overflow-x-auto mt-4">
   <table class="table w-full">
     <thead>
       <tr>
         <th>Nama Dinas</th>
+        <th>Username</th>
         <th>Deskripsi</th>
         <th>Kepala Dinas</th>
-        <th>Password</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-          <div class="flex justify-between">
-            <a href="/admin/edit-matkul/" class="btn btn-sm btn-warning mr-2">Edit</a>
-            <a href= "#" class="btn btn-sm btn-warning mr-2">Reset Password</a>
-            <label for="delete-modal-" class="btn btn-sm btn-error modal-button">Hapus</label>
-          </div>
-        </td>
-      </tr>
+      <% if (dinas.length > 0) { %>
+        <% dinas.forEach(function(item) { %>
+          <tr>
+            <td><%= item.nama_dinas %></td>
+            <td><%= item.dataUser.username %></td>
+            <td><%= item.deskripsi %></td>
+            <td><%= item.nama_kadin %></td>
+            <td>
+              <div class="flex justify-between">
+                <a href="/admin/editDinas/<%= item.id_dinas %>" class="btn btn-sm btn-warning mr-2">Edit</a>
+                <a href="#" class="btn btn-sm btn-warning mr-2">Reset Password</a>
+                <label for="delete-modal-<%= item.id_dinas %>" class="btn btn-sm btn-error modal-button">Hapus</label>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      <% } else { %>
+        <tr>
+          <td colspan="5" class="text-center">Tidak ada data dinas yang tersedia.</td>
+        </tr>
+      <% } %>
     </tbody>
   </table>
 </div>
+
+<% dinas.forEach(item => { %>
+  <input type="checkbox" id="delete-modal-<%= item.id_dinas %>" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
+      <p>Apakah Anda yakin ingin menghapus dinas <%= item.nama_dinas %>?</p>
+      <p>Semua data yang berhubungan dengan dinas ini akan ikut terhapus.</p>
+      <div class="modal-action">
+        <form action="/admin/hapusDinas/<%= item.id_dinas %>" method="post">
+          <button type="submit" class="btn btn-error">Ya, Hapus</button>
+        </form>
+        <label for="delete-modal-<%= item.id_dinas %>" class="btn">Batal</label>
+      </div>
+    </div>
+  </div>
+<% }) %>
+
 <%- include('footer')%>

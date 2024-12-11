@@ -12,6 +12,9 @@ router.get('/login', (req, res) => {
   res.render('login'); // Pastikan ini sesuai dengan nama file
 });
 
+router.post('/login', controller.login)
+router.get('/logout', controller.logout)
+
 // router.post('/logout', controller.logout);
 // router.get('/beams',  mhs.authBeam);
 

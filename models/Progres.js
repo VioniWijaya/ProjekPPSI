@@ -1,7 +1,7 @@
 const {
   DataTypes
 } = require('sequelize')
-const sequelize = require('../config/config')
+const sequelize = require('../config/db')
     const progres = sequelize.define('progres', {
       id_progres: {
         type: DataTypes.CHAR(10),
