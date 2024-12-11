@@ -7,8 +7,8 @@ module.exports = {
     await queryInterface.bulkInsert('User', [
       {
         id_user: 'U001',
-        username: 'admin_user',
-        password: await bcrypt.hash("admin01", 10),
+        username: 'admin',
+        password: await bcrypt.hash("admin", 10),
         role: 'admin',
       },
       {

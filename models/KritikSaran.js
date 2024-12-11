@@ -1,5 +1,8 @@
-module.exports = (sequelize, DataTypes) => {
-    const KritikSaran = sequelize.define('KritikSaran', {
+const {
+  DataTypes
+} = require('sequelize')
+const sequelize = require('../config/config')
+    const kritik_saran = sequelize.define('kritik_saran', {
       id_kritikdansaran: {
         type: DataTypes.CHAR(10),
         primaryKey: true,
@@ -12,11 +15,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     }, {
-      tableName: 'KritikSaran',
-      timestamps: false,
+      tableName: 'kritik_saran',
+      timestamps: true,
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     });
   
-    return KritikSaran;
-  };
+module.exports=kritik_saran;
   

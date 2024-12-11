@@ -2,27 +2,17 @@ const {
   DataTypes
 } = require('sequelize')
 const sequelize = require('../config/config')
-const dinas = sequelize.define('dinas', {
-  id_dinas: {
+
+const anggota_proker = sequelize.define('anggota_proker', {
+  id_anggota: {
     type: DataTypes.STRING(10),
     primaryKey: true,
   },
-  id_user: {
+  id_proker: {
     type: DataTypes.STRING(10),
-    allowNull: false,
+    primaryKey: true,
   },
-  nama_dinas: {
-    type: DataTypes.STRING(20),
-    allowNull: false,
-  },
-  deskripsi: {
-    type: DataTypes.STRING(200),
-    allowNull: false,
-  },
-  nama_kadin: {
-    type: DataTypes.STRING(50),
-    allowNull: false,
-  },
+
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -32,10 +22,10 @@ const dinas = sequelize.define('dinas', {
     allowNull: false,
   },
 }, {
-  tableName: 'dinas',
+  tableName: 'anggota_proker',
   timestamps: true,
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 });
 
-module.exports = dinas;
+module.exports= anggota_proker;

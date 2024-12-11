@@ -1,22 +1,13 @@
-'use strict';
-
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Proker', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('proker', {
       id_proker: {
-        type: Sequelize.CHAR(10),
-        allowNull: false,
+        type: Sequelize.STRING(10),
         primaryKey: true,
       },
       id_dinas: {
-        type: Sequelize.CHAR(10),
+        type: Sequelize.STRING(10),
         allowNull: false,
-        references: {
-          model: 'Dinas',
-          key: 'id_dinas',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       nama_proker: {
         type: Sequelize.STRING(50),
@@ -50,10 +41,22 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
+      status: {
+        type: Sequelize.ENUM('belum terlaksana', 'berjalan', 'terlaksana'),
+        allowNull: false,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Proker');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('proker');
   },
 };

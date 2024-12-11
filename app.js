@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const db = require('./models'); // Import Sequelize setup
+const db = require('./config/config');
+// const db = require('./models'); // Import Sequelize setup
 const path = require('path'); 
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -22,12 +23,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Sinkronisasi database
-db.sequelize.sync({ alter: true }).then(() => {
-  console.log('Database & tables created!');
-}).catch((error) => {
-  console.error('Error creating database tables:', error);
-});
+// // Sinkronisasi database
+// db.sequelize.sync({ alter: true }).then(() => {
+//   console.log('Database & tables created!');
+// }).catch((error) => {
+//   console.error('Error creating database tables:', error);
+// });
 
 // Routes
 app.use("/", router);

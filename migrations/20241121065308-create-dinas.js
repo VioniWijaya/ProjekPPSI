@@ -1,22 +1,13 @@
-'use strict';
-
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Dinas', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('dinas', {
       id_dinas: {
-        type: Sequelize.CHAR(10),
-        allowNull: false,
+        type: Sequelize.STRING(10),
         primaryKey: true,
       },
       id_user: {
-        type: Sequelize.CHAR(10),
+        type: Sequelize.STRING(10),
         allowNull: false,
-        references: {
-          model: 'User',
-          key: 'id_user',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       nama_dinas: {
         type: Sequelize.STRING(20),
@@ -30,10 +21,18 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Dinas');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('dinas');
   },
 };

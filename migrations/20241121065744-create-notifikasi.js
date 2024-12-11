@@ -1,32 +1,20 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Notifikasi', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('notifikasi', {
       id_notifikasi: {
         type: Sequelize.CHAR(10),
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
       },
-      id_kritiksaran: {
+      id_kritikdansaran: {
         type: Sequelize.CHAR(10),
         allowNull: false,
-        references: {
-          model: 'Kritik_Saran',
-          key: 'id_kritiksaran',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       id_dinas: {
         type: Sequelize.CHAR(10),
         allowNull: false,
-        references: {
-          model: 'Dinas',
-          key: 'id_dinas',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       judul: {
         type: Sequelize.STRING(10),
@@ -36,10 +24,22 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      status: {
+        type: Sequelize.ENUM('admin', 'dinas'),
+        allowNull: false,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Notifikasi');
-  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('notifikasi');
+  }
 };

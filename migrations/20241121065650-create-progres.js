@@ -1,22 +1,16 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Progres', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('progres', {
       id_progres: {
         type: Sequelize.CHAR(10),
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
       },
       id_proker: {
         type: Sequelize.CHAR(10),
         allowNull: false,
-        references: {
-          model: 'Proker',
-          key: 'id_proker',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       waktu_pelaksanaan: {
         type: Sequelize.STRING(100),
@@ -42,10 +36,18 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Progres');
-  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('progres');
+  }
 };
