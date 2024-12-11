@@ -1,8 +1,8 @@
 const {
   DataTypes
 } = require('sequelize')
-const sequelize = require('../config/config')
-  const proker = sequelize.define('proker', {
+const sequelize = require('../config/db')
+const proker = sequelize.define('proker', {
     id_proker: {
       type: DataTypes.STRING(10),
       primaryKey: true,
