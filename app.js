@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const db = require('./config/config');
+const db = require('./config/db');
 // const db = require('./models'); // Import Sequelize setup
 const path = require('path'); 
 const app = express();
