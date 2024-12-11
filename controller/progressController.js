@@ -1,6 +1,6 @@
 const express = require('express');
-const { Progres } = require('../models');
-const { Proker } = require('../models');
+const Progres = require('../models/Progres');
+const Proker = require('../models/Proker');
 
 const index = async (req, res) => {
     month = res.body ? res.body.month : new Date().getMonth() + 1;
@@ -11,7 +11,7 @@ const index = async (req, res) => {
                 attributes: ['nama_proker']
             }
         });
-        res.render('progress/index', {progress, month});
+        res.render('dinas/progress/index', {progress, month});
     } catch (error) {
         console.error(error.message);
     }

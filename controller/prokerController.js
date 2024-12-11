@@ -1,11 +1,11 @@
 const express = require('express');
-const { Proker } = require('../models');
+const Proker = require('../models/Proker');
 
 const index = async (req, res) => {
     try {
         const proker = await Proker.findAll();
-        res.render('proker/index', {proker});
-        // res.render('proker/index');
+        res.render('dinas/proker/index', {proker});
+        // res.render('dinas/proker/index');
     } catch (error) {
         console.error(error.message);
     }
@@ -18,7 +18,7 @@ const view = async (req, res) => {
                 id_proker: req.params.id
             }
         });
-        res.render('proker/view', {proker});
+        res.render('dinas/proker/view', {proker});
     } catch (error) {
         console.error(error.message);
     }
@@ -26,7 +26,7 @@ const view = async (req, res) => {
 
 const create = async (req, res) => {
     try {
-        res.render('proker/create');
+        res.render('dinas/proker/create');
     } catch (error) {
         console.error(error.message);
     }
@@ -77,7 +77,7 @@ const edit = async (req, res) => {
                 id_proker: req.params.id
             }
         });
-        res.render('proker/edit', {proker});
+        res.render('dinas/proker/edit', {proker});
     } catch (error) {
         console.error(error.message);
     }
