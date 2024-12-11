@@ -55,7 +55,7 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({
-                id: user.id,
+                id: user.id_user,
                 username: user.username,
                 role: user.role
             },
@@ -65,7 +65,7 @@ const login = async (req, res) => {
         );
 
         const refreshToken = jwt.sign({
-                id: user.id,
+                id: user.id_user,
                 username: user.username,
                 role: user.role
             },
