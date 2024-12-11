@@ -8,7 +8,8 @@ const index = async (req, res) => {
         const progress = await Progres.findAll({
             include: {
                 model: Proker,
-                attributes: ['nama_proker']
+                attributes: ['nama_proker'],
+                as: 'dataProker'
             }
         });
         res.render('dinas/progress/index', {progress, month});
