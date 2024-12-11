@@ -1,6 +1,7 @@
 const express = require('express');
 const Proker = require('../models/Proker');
 const Dinas = require('../models/Dinas');
+const Progress = require('../models/Progres');
 const jwt = require('jsonwebtoken');
 
 const index = async (req, res) => {
@@ -147,7 +148,33 @@ const getIdUser = async (req, res) => {
     return req.user.id;
 }
 
-// const dashboard = async (req, res) => {
+const dashboard = async (req, res) => {
+    try {
+        const berjalan = await Proker.findAll({
+            where: {
+                status: 'berjalan'
+            }
+        });
+
+        const belumTerlaksana = await Proker.findAll({
+            where: {
+                status: 'belum terlaksana'
+            }
+        });
+
+        const terlaksana = await Proker.findAll({
+            where: {
+                status: 'terlaksana'
+            }
+        });
+
+        const progress = await Progress.findAll();
+
+        res.render('dinas/index', {berjalan, belumTerlaksana, terlaksana, progress});
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 
 module.exports = {
     index,
@@ -155,5 +182,6 @@ module.exports = {
     create,
     store,
     edit,
-    update
+    update,
+    dashboard
 }

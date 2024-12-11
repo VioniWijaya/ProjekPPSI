@@ -5,7 +5,7 @@ const { prokerController } = require('../controller');
 const { progressController } = require('../controller');
 const { userController } = require('../controller');
 
-// router.get('/', prokerController.dashboard);
+router.get('/', prokerController.dashboard);
 
 router.get('/proker/', prokerController.index);
 router.get('/proker/create', prokerController.create);
