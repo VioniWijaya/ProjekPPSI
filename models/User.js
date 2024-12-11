@@ -1,5 +1,8 @@
-module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
+const {
+  DataTypes
+} = require('sequelize')
+const sequelize = require('../config/config')
+    const user = sequelize.define('user', {
       id_user: {
         type: DataTypes.STRING(10),
         primaryKey: true,
@@ -16,11 +19,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('admin', 'dinas'),
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     }, {
-      tableName: 'User',
-      timestamps: false,
+      tableName: 'user',
+      timestamps: true,
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     });
   
-    return User;
-  };
-  
+module.exports = user

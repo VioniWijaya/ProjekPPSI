@@ -1,5 +1,8 @@
-module.exports = (sequelize, DataTypes) => {
-    const Notifikasi = sequelize.define('Notifikasi', {
+const {
+  DataTypes
+} = require('sequelize')
+const sequelize = require('../config/config')
+    const notifikasi = sequelize.define('notifikasi', {
       id_notifikasi: {
         type: DataTypes.CHAR(10),
         primaryKey: true,
@@ -20,11 +23,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      status: {
+        type:  DataTypes.ENUM('admin', 'dinas'),
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     }, {
-      tableName: 'Notifikasi',
-      timestamps: false,
+      tableName: 'notifikasi',
+      timestamps: true,
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     });
   
-    return Notifikasi;
-  };
-  
+module.exports= notifikasi;

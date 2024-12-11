@@ -1,5 +1,8 @@
-module.exports = (sequelize, DataTypes) => {
-    const Progres = sequelize.define('Progres', {
+const {
+  DataTypes
+} = require('sequelize')
+const sequelize = require('../config/config')
+    const progres = sequelize.define('progres', {
       id_progres: {
         type: DataTypes.CHAR(10),
         primaryKey: true,
@@ -32,11 +35,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     }, {
-      tableName: 'Progres',
-      timestamps: false,
+      tableName: 'progres',
+      timestamps: true,
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     });
   
-    return Progres;
-  };
+module.exports= progres;
   

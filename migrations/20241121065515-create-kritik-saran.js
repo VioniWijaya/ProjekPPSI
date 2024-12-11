@@ -1,12 +1,12 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Kritik_Saran', {
-      id_kritiksaran: {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('kritik_saran', {
+      id_kritikdansaran: {
         type: Sequelize.CHAR(10),
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
       },
       isi: {
         type: Sequelize.STRING(200),
@@ -16,10 +16,18 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Kritik_Saran');
-  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('kritik_saran');
+  }
 };
