@@ -1,5 +1,8 @@
 const express = require('express');
 const Proker = require('../models/Proker');
+const Dinas = require('../models/Dinas');
+const Progress = require('../models/Progres');
+const jwt = require('jsonwebtoken');
 
 const index = async (req, res) => {
     try {
@@ -41,29 +44,43 @@ const store = async (req, res) => {
         sasaran,
         target_waktu,
         tempat,
+        status,
         anggaran,
     } = req.body;
     try {
-        // save proker to database
-        let randProkerId = Math.random().toString(36).substring(7);
+        
+        // Generate ID Dinas
+        const generateProker = () => {
+            const prefix = 'PRO-';
+            const timestampPart = Date.now().toString().slice(-4);
+            return `${prefix}${timestampPart}`;
+        };
+
+        const id_user = await getIdUser(req, res);
+
+        const dinas = await Dinas.findOne({
+            where: {
+                id_user
+            }
+        });
         const proker = await Proker.create({
-            id_proker: randProkerId, // temporary id_proker
+            id_proker: generateProker(), // temporary id_proker
             nama_proker,
-            // id_dinas: req.session.user.id_dinas, // TODO: id dinas can be added to the session
-            id_dinas: 'D001', // temporary id_dinas
+            id_dinas: dinas.id_dinas,
             pj_proker,
             kegiatan,
             tujuan,
             sasaran,
             target_waktu,
             tempat,
+            status,
             anggaran,
         });
 
         if (!proker) {
-            return res.redirect('/proker/create');
+            return res.redirect('/dinas/proker/create');
         }else{
-            return res.redirect('/proker');
+            return res.redirect('/dinas/proker');
         }
     } catch (error) {
         console.error(error.message);
@@ -92,6 +109,7 @@ const update = async (req, res) => {
         sasaran,
         target_waktu,
         tempat,
+        status,
         anggaran,
     } = req.body;
     try {
@@ -104,6 +122,7 @@ const update = async (req, res) => {
             sasaran,
             target_waktu,
             tempat,
+            status,
             anggaran,
         }, {
             where: {
@@ -112,16 +131,50 @@ const update = async (req, res) => {
         });
 
         if (!proker) {
-            return res.redirect('/proker/edit/' + req.params.id);
+            return res.redirect('/dinas/proker/edit/' + req.params.id);
         }else{
-            return res.redirect('/proker');
+            return res.redirect('/dinas/proker');
         }
     } catch (error) {
         console.error(error.message);
     }
 }
 
-// const dashboard = async (req, res) => {
+const getIdUser = async (req, res) => {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    req.user = decoded;
+
+    return req.user.id;
+}
+
+const dashboard = async (req, res) => {
+    try {
+        const berjalan = await Proker.findAll({
+            where: {
+                status: 'berjalan'
+            }
+        });
+
+        const belumTerlaksana = await Proker.findAll({
+            where: {
+                status: 'belum terlaksana'
+            }
+        });
+
+        const terlaksana = await Proker.findAll({
+            where: {
+                status: 'terlaksana'
+            }
+        });
+
+        const progress = await Progress.findAll();
+
+        res.render('dinas/index', {berjalan, belumTerlaksana, terlaksana, progress});
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 
 module.exports = {
     index,
@@ -129,5 +182,6 @@ module.exports = {
     create,
     store,
     edit,
-    update
+    update,
+    dashboard
 }

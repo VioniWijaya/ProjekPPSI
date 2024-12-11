@@ -252,6 +252,7 @@ const hapusDinas = async (req, res) => {
     });
 
     let success = "Dinas Berhasil Di Hapus";
+
     res.cookie("success", success, {
         maxAge: 1000,
         httpOnly: true

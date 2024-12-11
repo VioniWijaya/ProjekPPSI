@@ -3,36 +3,40 @@
     <div class="px-8 py-6">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-bold text-blue-800">Daftar Progress Perbulan</h3>
-            <a href="progress/create" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
-                <span class="text-lg font-semibold">Tambah Progres</span>
-            </a>
         </div>
         <div>
-            <!-- filter by month -->
-            <form action="/progress" method="get">
-                <div class="grid grid-cols-2">
-                    <div class="form-control">
-                        <select name="month" id="month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value="1" <%= month === '1' ? 'selected' : '' %>>Januari</option>
-                            <option value="2" <%= month === '2' ? 'selected' : '' %>>Februari</option>
-                            <option value="3" <%= month === '3' ? 'selected' : '' %>>Maret</option>
-                            <option value="4" <%= month === '4' ? 'selected' : '' %>>April</option>
-                            <option value="5" <%= month === '5' ? 'selected' : '' %>>Mei</option>
-                            <option value="6" <%= month === '6' ? 'selected' : '' %>>Juni</option>
-                            <option value="7" <%= month === '7' ? 'selected' : '' %>>Juli</option>
-                            <option value="8" <%= month === '8' ? 'selected' : '' %>>Agustus</option>
-                            <option value="9" <%= month === '9' ? 'selected' : '' %>>September</option>
-                            <option value="10" <%= month === '10' ? 'selected' : '' %>>Oktober</option>
-                            <option value="11" <%= month === '11' ? 'selected' : '' %>>November</option>
-                            <option value="12" <%= month === '12' ? 'selected' : '' %>>Desember</option>
-                        </select>
-                    </div>
-                    <div class="form-control">
-                        <button type="submit" class="btn btn-primary w-1/2 ml-auto">Filter</button>
-                    </div>
+            <div class="grid grid-cols-2">
+                <!-- filter by month -->
+                <form action="/dinas/progress" method="get">
+                    <div class="grid grid-cols-2">
+
+                        <div class="form-control">
+                            <select name="month" id="month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-4/5 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="1" <%= month === '1' ? 'selected' : '' %>>Januari</option>
+                                <option value="2" <%= month === '2' ? 'selected' : '' %>>Februari</option>
+                                <option value="3" <%= month === '3' ? 'selected' : '' %>>Maret</option>
+                                <option value="4" <%= month === '4' ? 'selected' : '' %>>April</option>
+                                <option value="5" <%= month === '5' ? 'selected' : '' %>>Mei</option>
+                                <option value="6" <%= month === '6' ? 'selected' : '' %>>Juni</option>
+                                <option value="7" <%= month === '7' ? 'selected' : '' %>>Juli</option>
+                                <option value="8" <%= month === '8' ? 'selected' : '' %>>Agustus</option>
+                                <option value="9" <%= month === '9' ? 'selected' : '' %>>September</option>
+                                <option value="10" <%= month === '10' ? 'selected' : '' %>>Oktober</option>
+                                <option value="11" <%= month === '11' ? 'selected' : '' %>>November</option>
+                                <option value="12" <%= month === '12' ? 'selected' : '' %>>Desember</option>
+                            </select>
+                        </div>
+                        <div class="form-control">
+                            <button type="submit" class="btn btn-primary w-1/2">Filter</button>
+                        </div>
+                    </div>  
+                </form>
+                <div class="flex justify-end">
+                    <a href="/dinas/progress/create" class="w-1/3 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+                        <span class="text-lg font-semibold">Tambah Progres</span>
+                    </a>
                 </div>
-                
-            </form>
+            </div>
         </div>
 
         <!-- List -->

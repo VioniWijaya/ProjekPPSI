@@ -55,7 +55,9 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({
+
                 id: user.id,
+
                 username: user.username,
                 role: user.role
             },
@@ -65,7 +67,9 @@ const login = async (req, res) => {
         );
 
         const refreshToken = jwt.sign({
+
                 id: user.id,
+
                 username: user.username,
                 role: user.role
             },
@@ -137,4 +141,6 @@ const logout = async (req, res) => {
 module.exports = {
     login,
     logout
+
 }
+

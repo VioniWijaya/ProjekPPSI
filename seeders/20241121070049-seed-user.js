@@ -10,12 +10,16 @@ module.exports = {
         username: 'admin',
         password: await bcrypt.hash("admin", 10),
         role: 'admin',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id_user: 'U002',
         username: 'dinasristek',
         password: await bcrypt.hash("ristek", 10),
         role: 'dinas',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
   },

@@ -8,7 +8,8 @@ const index = async (req, res) => {
         const progress = await Progres.findAll({
             include: {
                 model: Proker,
-                attributes: ['nama_proker']
+                attributes: ['nama_proker'],
+                as: 'dataProker'
             }
         });
         res.render('dinas/progress/index', {progress, month});
@@ -17,6 +18,24 @@ const index = async (req, res) => {
     }
 }
 
+const upload = async (req, res) => {
+    try {
+        res.render('dinas/progress/upload');
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+const allProgress = async (req, res) => {
+    try {
+        res.render('dinas/progress/allProgress');
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+
 module.exports = {
-    index
+    index,
+    upload,
+    allProgress
 }

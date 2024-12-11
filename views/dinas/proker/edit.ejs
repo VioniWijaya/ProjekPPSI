@@ -1,6 +1,6 @@
 <%- include('../layout/sidebar')%>
 <div class="px-8 py-6 bg-white">
-    <form method="post" action="/proker/edit/<%= proker.id_proker %>">
+    <form method="post" action="/dinas/proker/edit/<%= proker.id_proker %>">
         <div class="form-control">
             <label class="label">
                 <span class="label-text">Nama Program Kerja</span>
@@ -36,6 +36,16 @@
                 <span class="label-text">Waktu Pelaksanaan</span>
             </label>
             <input type="text" placeholder="Waktu Pelaksanaan" class="input input-bordered" name="target_waktu" value="<%= proker.target_waktu %>" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Status</span>
+            </label>
+            <select name="status" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                <option value="belum terlaksana" <%= proker.status === 'belum terlaksana' ? 'selected' : '' %>>Belum Terlaksana</option>
+                <option value="berjalan" <%= proker.status === 'berjalan' ? 'selected' : '' %>>Berjalan</option>
+                <option value="terlaksana" <%= proker.status === 'terlaksana' ? 'selected' : '' %>>Terlaksana</option>
+            </select>
         </div>
         <div class="form-control grid grid-cols-2">
             <div>

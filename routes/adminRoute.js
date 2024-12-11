@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 const islogin = require('../middleware/islogin.middleware')
 const controllerDinas = require('../controller/kelolaDinasController')
+
 const controllerKritikSaran = require('../controller/kelolaKritikSaranController')
+
 
 
 router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => {
@@ -12,6 +14,7 @@ router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => 
   router.get('/lihatDinas',islogin.verifyTokenAndRole(['admin']), controllerDinas.lihatDinas);
 
   router.get('/editDinas/:id',islogin.verifyTokenAndRole(['admin']), controllerDinas.editDinas);
+
   router.get('/lihatProgres',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.lihatProgres);
 
   router.get('/kritikSaran',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.lihatKritikSaran);
@@ -29,5 +32,6 @@ router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => 
 router.post('/tambahDinas', islogin.verifyTokenAndRole(['admin']), controllerDinas.tambahDinas);
 router.post('/editDinas/:id', islogin.verifyTokenAndRole(['admin']), controllerDinas.updateDinas);
 router.post('/hapusDinas/:id', islogin.verifyTokenAndRole(['admin']), controllerDinas.hapusDinas);
+
 
 module.exports = router;
