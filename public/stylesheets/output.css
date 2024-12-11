@@ -1968,6 +1968,10 @@ html {
   width: 66.666667%;
 }
 
+.w-60 {
+  width: 15rem;
+}
+
 .w-64 {
   width: 16rem;
 }
@@ -1978,10 +1982,6 @@ html {
 
 .w-full {
   width: 100%;
-}
-
-.w-60 {
-  width: 15rem;
 }
 
 .max-w-md {

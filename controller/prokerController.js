@@ -78,9 +78,9 @@ const store = async (req, res) => {
         });
 
         if (!proker) {
-            return res.redirect('/proker/create');
+            return res.redirect('/dinas/proker/create');
         }else{
-            return res.redirect('/proker');
+            return res.redirect('/dinas/proker');
         }
     } catch (error) {
         console.error(error.message);
@@ -131,9 +131,9 @@ const update = async (req, res) => {
         });
 
         if (!proker) {
-            return res.redirect('/proker/edit/' + req.params.id);
+            return res.redirect('/dinas/proker/edit/' + req.params.id);
         }else{
-            return res.redirect('/proker');
+            return res.redirect('/dinas/proker');
         }
     } catch (error) {
         console.error(error.message);
