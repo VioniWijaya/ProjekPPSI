@@ -8,12 +8,8 @@ const index = async (req, res) => {
         const progress = await Progres.findAll({
             include: {
                 model: Proker,
-                attributes: ['nama_proker'],
-                as: 'dataProker',
-            },
-            // where: {
-            //     waktu_pelaksanaan: month
-            // }
+                attributes: ['nama_proker']
+            }
         });
         res.render('dinas/progress/index', {progress, month});
     } catch (error) {
@@ -21,14 +17,24 @@ const index = async (req, res) => {
     }
 }
 
-// const getIdUser = async (req, res) => {
-//     const token = req.cookies.token;
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
-//     req.user = decoded;
+const upload = async (req, res) => {
+    try {
+        res.render('dinas/progress/upload');
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+const allProgress = async (req, res) => {
+    try {
+        res.render('dinas/progress/allProgress');
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 
-//     return req.user.id;
-// }
 
 module.exports = {
-    index
+    index,
+    upload,
+    allProgress
 }
