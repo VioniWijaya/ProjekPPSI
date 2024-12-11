@@ -1,6 +1,6 @@
 const express = require('express');
-const { User } = require('../models');
-const { Dinas } = require('../models');
+const User = require('../models/User');
+const Dinas = require('../models/Dinas');
 
 const bcrypt = require('bcrypt');
 
