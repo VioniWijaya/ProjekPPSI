@@ -9,7 +9,12 @@ const verifyUser= require ('../middleware/verifyUser.middleware');
 
 // Dalam routes/auth.route.js
 router.get('/login', (req, res) => {
-  res.render('login'); // Pastikan ini sesuai dengan nama file
+  const pesan = req.cookies.pesan || null;
+  
+  // Hapus cookie setelah dibaca
+  res.clearCookie('pesan');
+  
+  res.render('login', { pesan }); // Pastikan ini sesuai dengan nama file
 });
 
 router.post('/login', controller.login)

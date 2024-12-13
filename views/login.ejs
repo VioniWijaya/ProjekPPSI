@@ -23,6 +23,13 @@
         <h2 class="text-l font-semi-bold mb-4 text-center">
           Silahkan login untuk melanjutkan
         </h2>
+        <% if (locals.pesan && pesan.length > 0) { %>
+          <div class="alert alert-error mb-4 text-center">
+            <% pesan.forEach(function(item) { %>
+              <p class="text-white"><%= item.msg %></p>
+            <% }) %>
+          </div>
+        <% } %>
 
         <label class="mt-7 input input-bordered flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
