@@ -1,0 +1,35 @@
+<%- include('sidebar')%>
+    <!-- Content -->
+    <div class="px-8 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-blue-900 mb-6">Dashboard</h1>
+        </div>
+
+        <!-- List -->
+        <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-blue-100 p-6 rounded-lg shadow flex flex-col items-center">
+                    <p class="text-4xl font-bold text-blue-900"><%= terlaksana.length %></p>
+                    <p class="text-lg text-blue-900">Terlaksana</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-blue-100 p-6 rounded-lg shadow flex flex-col items-center">
+                    <p class="text-4xl font-bold text-blue-900"><%= berjalan.length %></p>
+                    <p class="text-lg text-blue-900">Sedang Berjalan</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-blue-100 p-6 rounded-lg shadow flex flex-col items-center">
+                    <p class="text-4xl font-bold text-blue-900"><%= belumTerlaksana.length %></p>
+                    <p class="text-lg text-blue-900">Belum Terlaksana</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-blue-100 p-6 rounded-lg shadow flex flex-col items-center">
+                    <p class="text-4xl font-bold text-blue-900"><%= progress.length %></p>
+                    <p class="text-lg text-blue-900">Progres</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer.ejs')%>

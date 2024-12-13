@@ -3,7 +3,6 @@ const Proker = require('../models/Proker');
 const Dinas = require('../models/Dinas');
 const Progress = require('../models/Progres');
 const Anggota = require('../models/Anggota');
-const Anggota_Proker = require('../models/Anggota_Proker');
 const jwt = require('jsonwebtoken');
 
 const index = async (req, res) => {
@@ -249,6 +248,40 @@ const dashboard = async (req, res) => {
     }
 }
 
+const dashboardAdmin = async (req, res) => {
+    try {
+        const berjalan = await Proker.findAll({
+            where: {
+                status: 'berjalan'
+            }
+        });
+
+        const belumTerlaksana = await Proker.findAll({
+            where: {
+                status: 'belum terlaksana'
+            }
+        });
+
+        const terlaksana = await Proker.findAll({
+            where: {
+                status: 'terlaksana'
+            }
+        });
+
+        const progress = await Progress.findAll();
+
+        res.render('admin/dashboardAdmin', {
+            berjalan: berjalan.length,  
+            belumTerlaksana: belumTerlaksana.length, 
+            terlaksana: terlaksana.length,  
+            progress: progress.length  
+        });
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+
 module.exports = {
     index,
     view,
@@ -256,5 +289,6 @@ module.exports = {
     store,
     edit,
     update,
-    dashboard
+    dashboard,
+    dashboardAdmin
 }
