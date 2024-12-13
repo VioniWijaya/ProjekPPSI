@@ -15,7 +15,8 @@ router.post('/proker/edit/:id', prokerController.update);
 router.get('/proker/view/:id', prokerController.view);
 
 router.get('/progress', progressController.index);
-
+router.get('/progress/create', progressController.create);
+router.post('/progress/create', progressController.store);
 router.get('/profile', userController.profile);
 router.post('/profile', userController.updateProfile);
 

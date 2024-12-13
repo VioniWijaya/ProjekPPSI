@@ -3,7 +3,7 @@ const Proker = require('../models/Proker');
 const Dinas = require('../models/Dinas');
 const Progress = require('../models/Progres');
 const Anggota = require('../models/Anggota');
-const Anggota_Proker = require('../models/Anggota_Proker');
+const Anggota_Proker = require('../models/Anggota_proker');
 const jwt = require('jsonwebtoken');
 
 const index = async (req, res) => {
