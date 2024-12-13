@@ -26,12 +26,11 @@ const profile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
-        const { username, dinas, role, password } = req.body;
+        const { username, dinas, deskripsi, nama_kadin, password, } = req.body;
         const hashPassword = await bcrypt.hash(password, 10);
         const id_user = await getIdUser(req, res);
         await User.update({
             username,
-            role,
             password: hashPassword
         }, {
             where: {
@@ -40,14 +39,15 @@ const updateProfile = async (req, res) => {
         });
 
         await Dinas.update({
-            nama_dinas: dinas
+            nama_dinas: dinas,
+            deskripsi,
+            nama_kadin
         }, {
             where: {
-                // id_user: req.session.user.id_user // TODO: change back to this
-                id_user: 'U001' // this is temporary
+                id_user
             }
         });
-        res.redirect('/user/profile');
+        res.redirect('/dinas/profile');
     } catch (error) {
         console.error(error.message);
     }
