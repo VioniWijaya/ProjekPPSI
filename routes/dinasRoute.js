@@ -22,6 +22,7 @@ router.post('/progress/create', isLogin.verifyTokenAndRole(['dinas']), upload.si
 router.get('/progress/edit/:id', isLogin.verifyTokenAndRole(['dinas']), progressController.editProgres);
 router.post('/progress/update/:id',isLogin.verifyTokenAndRole(['dinas']), upload.single('file'), progressController.updateProgres);
 router.get('/progress/view/:id', isLogin.verifyTokenAndRole(['dinas']), progressController.lihatDetailProgres);
+router.post('/progres/delete/:id', isLogin.verifyTokenAndRole(['dinas']), progressController.hapusProgres);
 
 router.get('/profile',isLogin.verifyTokenAndRole(['dinas']), userController.profile);
 router.post('/profile',isLogin.verifyTokenAndRole(['dinas']), userController.updateProfile);

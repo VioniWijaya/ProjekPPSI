@@ -6,6 +6,8 @@ const Anggota = require('../models/Anggota');
 const Anggota_Proker = require('../models/Anggota_proker');
 const jwt = require('jsonwebtoken');
 const multer = require("multer");
+const fs = require('fs');
+const path = require('path');
 
 
 const index = async (req, res) => {
@@ -288,11 +290,52 @@ const lihatDetailProgres = async (req, res) => {
         });
     }
 }
+
+
+const hapusProgres = async (req, res) => {
+    const {
+        id
+    } = req.params;
+
+    const progres = await Progres.findByPk(id);
+    if (!progres) {
+        return res.status(404).json({
+            success: false,
+            message: 'progres tidak ditemukan.'
+        });
+    }
+
+    if (progres.file_upload) {
+        const oldFilePath = path.join(__dirname, '../public/images/', progres.file_upload); // Lokasi file lama
+        fs.unlink(oldFilePath, (err) => {
+            if (err) {
+                console.error('Error saat menghapus file lama:', err);
+            } else {
+                console.log('File lama berhasil dihapus:', progres.file_upload);
+            }
+        });
+    }
+
+    // Hapus data Dinas
+    await Progres.destroy({
+        where: {
+            id_progres: id
+        }
+    });
+
+    let success = "Dinas Berhasil Di Hapus";
+    res.cookie("success", success, {
+        maxAge: 1000,
+        httpOnly: true
+    });
+    res.redirect("/dinas/progress");
+}
 module.exports = {
     index,
     create,
     store,
     editProgres,
     updateProgres,
-    lihatDetailProgres
+    lihatDetailProgres,
+    hapusProgres
 }

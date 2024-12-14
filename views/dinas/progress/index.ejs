@@ -53,6 +53,7 @@
                         <div>
                             <a href="/dinas/progress/edit/<%= prog.id_progres %>" class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
                             <a href="/dinas/progress/view/<%= prog.id_progres %>" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
+                            <label for="delete-modal-<%= prog.id_progres %>" class="btn btn-sm btn-error modal-button">Hapus</label>
                         </div>
                     </div>
                 <% }) %>
@@ -60,4 +61,21 @@
         </div>
     </div>
 </div>
+
+<% progress.forEach(item => { %>
+    <input type="checkbox" id="delete-modal-<%= item.id_progres %>" class="modal-toggle" />
+    <div class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
+        <p>Apakah Anda yakin ingin menghapus progres <%= item.id_progres %>?</p>
+        <p>Semua data yang berhubungan dengan progres ini akan ikut terhapus.</p>
+        <div class="modal-action">
+          <form action="/dinas/progres/delete/<%= item.id_progres %>" method="post">
+            <button type="submit" class="btn btn-error">Ya, Hapus</button>
+          </form>
+          <label for="delete-modal-<%= item.id_progres %>" class="btn">Batal</label>
+        </div>
+      </div>
+    </div>
+  <% }) %>
 <%- include('../layout/footer.ejs')%>
