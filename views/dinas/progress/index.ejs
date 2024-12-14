@@ -9,9 +9,8 @@
                 <!-- filter by month -->
                 <form action="/dinas/progress" method="get">
                     <div class="grid grid-cols-2">
-
                         <div class="form-control">
-                            <select name="month" id="month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-4/5 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select name="month" id="month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-4/5 p-2.5">
                                 <option value="1" <%= month === '1' ? 'selected' : '' %>>Januari</option>
                                 <option value="2" <%= month === '2' ? 'selected' : '' %>>Februari</option>
                                 <option value="3" <%= month === '3' ? 'selected' : '' %>>Maret</option>
@@ -40,17 +39,24 @@
         </div>
 
         <!-- List -->
-        <div class="space-y-4">
-            <!-- Populate progress var -->
-            <% progress.forEach(progress => { %>
-                <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
-                    <span class="text-blue-800 font-medium"><%= progress.waktu_pelaksanaan %> - <%= progress.Proker.nama_proker %></span>
-                    <div>
-                        <a href="/progress/edit/<%= progress.id_progres %>" class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
-                        <a href="/progress/view/<%= progress.id_progres %>" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
-                    </div>
+        <div class="space-y-4 mt-4">
+            <% if (progress.length === 0) { %>
+                <div class="text-center text-gray-500">
+                    Tidak ada progress untuk bulan ini
                 </div>
-            <% }) %>
+            <% } else { %>
+                <% progress.forEach(prog => { %>
+                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-md shadow">
+                        <span class="text-blue-800 font-medium">
+                            <%= prog.tanggal_pelaksanaan %> - <%= prog.dataProker.nama_proker %>
+                        </span>
+                        <div>
+                            <a href="/dinas/progress/edit/<%= prog.id_progress %>" class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
+                            <a href="/dinas/progress/view/<%= prog.id_progress %>" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
         </div>
     </div>
 </div>

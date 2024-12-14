@@ -1,6 +1,3 @@
-// const express = require('express');
-// const Progres = require('../models/Progres');
-// const Proker = require('../models/Proker');
 const express = require('express');
 const Proker = require('../models/Proker');
 const Dinas = require('../models/Dinas');

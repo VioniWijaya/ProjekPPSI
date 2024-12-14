@@ -6,11 +6,32 @@ const Anggota = require('../models/Anggota');
 const Anggota_Proker = require('../models/Anggota_proker');
 const jwt = require('jsonwebtoken');
 
+// const index = async (req, res) => {
+//     try {
+//         const proker = await Proker.findAll();
+//         res.render('dinas/proker/index', {proker});
+//         // res.render('dinas/proker/index');
+//     } catch (error) {
+//         console.error(error.message);
+//     }
+// }
+
+
 const index = async (req, res) => {
     try {
-        const proker = await Proker.findAll();
+        const id_user = await getIdUser(req, res);
+        const dinas = await Dinas.findOne({
+            where: {
+                id_user
+            }
+        });
+
+        const proker = await Proker.findAll({
+            where: {
+                id_dinas: dinas.id_dinas, // Only fetch proker for the current dinas
+            }
+        });
         res.render('dinas/proker/index', {proker});
-        // res.render('dinas/proker/index');
     } catch (error) {
         console.error(error.message);
     }
