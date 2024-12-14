@@ -5,6 +5,8 @@ const Progres = require('../models/Progres');
 const Anggota = require('../models/Anggota');
 const Anggota_Proker = require('../models/Anggota_proker');
 const jwt = require('jsonwebtoken');
+const multer = require("multer");
+
 
 const index = async (req, res) => {
     month = res.body ? res.body.month : new Date().getMonth() + 1;
@@ -34,21 +36,72 @@ const index = async (req, res) => {
 //     }
 // }
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/'); 
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + '-' + file.originalname);
+    }
+});
+
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "application/pdf"
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error("Invalid file type, only JPEG, PNG, and PDF is allowed!"),
+      false
+    );
+  }
+};
+
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5, 
+  },
+  fileFilter: fileFilter,
+});
+
+
+// const create = async (req, res) => {
+//     try {
+//         const proker = await Proker.findAll({
+//             attributes: ['id_proker', 'nama_proker'], // Ambil hanya id_proker dan nama_proker
+//         });
+//         res.render('dinas/progress/create', { proker }); // Kirim data ke view
+//     } catch (error) {
+//         console.error(error.message);
+//     }
+// };
+
 const create = async (req, res) => {
     try {
+        
+        // Dapatkan program kerja hanya dari dinas yang login
         const proker = await Proker.findAll({
-            attributes: ['id_proker', 'nama_proker'], // Ambil hanya id_proker dan nama_proker
+            // where: { id_dinas },  // Filter berdasarkan dinas
+            attributes: ['id_proker', 'nama_proker'], 
         });
-        res.render('dinas/progress/create', { proker }); // Kirim data ke view
+
+        res.render('dinas/progress/create', { proker });
     } catch (error) {
         console.error(error.message);
+        res.status(500).send('Terjadi kesalahan pada server.');
     }
 };
 
 
-
 const store = async (req, res) => {
-    let {
+    const {
         id_proker,
         tanggal_pelaksanaan,
         kendala,
@@ -58,27 +111,45 @@ const store = async (req, res) => {
     } = req.body;
 
     try {
+        // Validasi data input
+        if (!id_proker || !tanggal_pelaksanaan) {
+            throw new Error('ID Program Kerja dan Tanggal Pelaksanaan wajib diisi.');
+        }
+
+        // Simpan data ke database
         const progress = await Progres.create({
-            id_progress: generateProgress(), // Fungsi untuk membuat ID unik
-            id_proker, // Hubungkan ke program kerja
+            id_progress: generateProgress(), // ID unik
+            id_proker,
             tanggal_pelaksanaan,
             kendala,
-            jumlah_pelaksanaan,
+            jumlah_pelaksanaan: jumlah_pelaksanaan || null, // Nilai default null jika tidak diisi
             target,
             revisi,
-            file: req.file ? req.file.filename : null, // Jika file diupload
+            file: req.file ? req.file.filename : null, // Nama file dari multer
             createdAt: new Date(),
             updatedAt: new Date(),
         });
-        return res.redirect('/dinas/progress'); // Redirect setelah sukses
+
+        res.redirect('/dinas/progress'); // Redirect setelah sukses
     } catch (error) {
         console.error(error.message);
+
+        // Hapus file jika terjadi error setelah upload
+        if (req.file) {
+            const fs = require('fs');
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.error('Gagal menghapus file:', err.message);
+            });
+        }
+
         res.status(500).send('Terjadi kesalahan pada server.');
     }
 };
+
 
 module.exports = {
     index,
     create,
     store,
+    upload
 }

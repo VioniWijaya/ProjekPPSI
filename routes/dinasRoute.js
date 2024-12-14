@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const isLogin = require('../middleware/islogin.middleware');
 const { prokerController } = require('../controller');
-const { progressController } = require('../controller');
+const { progressController, upload } = require('../controller');
 const { userController } = require('../controller');
+
 
 router.get('/', prokerController.dashboard);
 
@@ -16,7 +17,7 @@ router.get('/proker/view/:id', prokerController.view);
 
 router.get('/progress', progressController.index);
 router.get('/progress/create', progressController.create);
-router.post('/progress/create', progressController.store);
+router.post('/progress/create', upload.single('file'), progressController.store);
 router.get('/profile', userController.profile);
 router.post('/profile', userController.updateProfile);
 
