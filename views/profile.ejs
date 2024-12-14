@@ -1,28 +1,31 @@
 <%- include('dinas/layout/sidebar')%>
 <div class="px-8 py-6 bg-white">
-    <form method="post" action="/user/profile">
+    <form method="post" action="/dinas/profile">
         <div class="form-control">
             <label class="label">
                 <span class="label-text">Username</span>
             </label>
-            <input type="text" placeholder="Username" class="input input-bordered" name="username" value="<%= dinas.User.username %>" required />
+            <input type="text" placeholder="Username" class="input input-bordered" name="username" value="<%= dinas.dataUser.username %>" required />
         </div>
         <div class="form-control">
             <label class="label">
-                <span class="label-text">Dinas</span>
+                <span class="label-text">Nama Dinas</span>
             </label>
             <input type="text" placeholder="Dinas" class="input input-bordered" name="dinas" value="<%= dinas.nama_dinas %>" required />
         </div>
         <div class="form-control">
             <label class="label">
-                <span class="label-text">Jabatan</span>
+                <span class="label-text">Deskripsi</span>
             </label>
-            <select name="role" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                <option value="" disabled <%= dinas.User.role ? '' : 'selected' %>>Pilih Jabatan</option>
-                <option value="admin" <%= dinas.User.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                <option value="user" <%= dinas.User.role === 'user' ? 'selected' : '' %>>User</option>
-            </select>
+            <input type="text" placeholder="Dinas" class="input input-bordered" name="deskripsi" value="<%= dinas.deskripsi %>" required />
         </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Nama Kepala Dinas</span>
+            </label>
+            <input type="text" placeholder="Dinas" class="input input-bordered" name="nama_kadin" value="<%= dinas.nama_kadin %>" required />
+        </div>
+        
         <div class="form-control">
             <label class="label">
                 <span class="label-text">Password</span>

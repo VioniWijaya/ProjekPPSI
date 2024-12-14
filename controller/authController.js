@@ -16,11 +16,20 @@ const login = async (req, res) => {
         } = req.body;
         console.log("iniloh", username, password);
 
+// yg lama
+        // if (!username || !password) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Lengkapi data akun anda'
+        //     })
+        // }
+
         if (!username || !password) {
-            return res.status(400).json({
-                success: false,
-                message: 'Lengkapi data akun anda'
-            })
+            return res.cookie("pesan", [{ msg: 'Lengkapi data akun anda' }], {
+                maxAge: 5000,
+                httpOnly: true
+            }).redirect("/login");
+
         }
 
         const user = await modelUser.findOne({
@@ -30,32 +39,49 @@ const login = async (req, res) => {
         });
         console.log("user.password", user.password);
         
+
+        // yg lama
+        // if (!user) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Username tidak ditemukan'
+        //     })
+
+        // }
+
         if (!user) {
-            return res.status(400).json({
-                success: false,
-                message: 'Username tidak ditemukan'
-            })
-
+            return res.cookie("pesan", [{ msg: 'Username tidak ditemukan' }], {
+                maxAge: 5000,
+                httpOnly: true
+            }).redirect("/login");
         }
-
 
         const isValidPassword = await bcrypt.compare(password, user.password);
 
-        if (!isValidPassword) {
-            console.log("pass salah");
+        // if (!isValidPassword) {
+        //     console.log("pass salah");
             
-            const message = [{
-                msg: 'username atau password salah'
-            }];
-            res.cookie("pesan", message, {
-                maxAge: 1000,
+        //     const message = [{
+        //         msg: 'username atau password salah'
+        //     }];
+        //     res.cookie("pesan", message, {
+        //         maxAge: 1000,
+        //         httpOnly: true
+        //     });
+        //     return res.redirect("/login");
+        // }
+
+        if (!isValidPassword) {
+            return res.cookie("pesan", [{ msg: 'Username atau password salah' }], {
+                maxAge: 5000,
                 httpOnly: true
-            });
-            return res.redirect("/login");
+            }).redirect("/login");
         }
 
         const token = jwt.sign({
-                id: user.id,
+
+                id: user.id_user,
+
                 username: user.username,
                 role: user.role
             },
@@ -65,7 +91,10 @@ const login = async (req, res) => {
         );
 
         const refreshToken = jwt.sign({
-                id: user.id,
+
+
+                id: user.id_user,
+
                 username: user.username,
                 role: user.role
             },
@@ -87,9 +116,15 @@ const login = async (req, res) => {
         res.redirect(getRedirectUrl(user.role));
     } catch (err) {
         console.error("Error during login: ", err);
-        res.status(500).json({
-            message: "Internal server error"
-        });
+
+        // res.status(500).json({
+        //     message: "Internal server error"
+        // });
+        return res.cookie("pesan", [{ msg: 'Username atau password salah' }], {
+            maxAge: 5000,
+            httpOnly: true
+        }).redirect("/login");
+
     }
 };
 
@@ -137,4 +172,5 @@ const logout = async (req, res) => {
 module.exports = {
     login,
     logout
+
 }

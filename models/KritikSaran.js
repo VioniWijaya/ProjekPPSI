@@ -35,4 +35,3 @@ const sequelize = require('../config/db')
     });
   
 module.exports=kritik_saran;
-  

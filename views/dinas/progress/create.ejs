@@ -1,0 +1,42 @@
+<%- include('../layout/sidebar')%>
+
+<h1 class="text-3xl font-bold pb-5">Upload Progress Proker</h1>
+
+<form method="post" action="/progress/create" enctype="multipart/form-data">
+    <div class="pb-5">
+        <label class="block text-sm">Program Kerja</label>
+        <select class="w-full border rounded p-2" name="id_proker" required>
+          <option value="">Pilih Program Kerja</option>
+          <% proker.forEach(p => { %>
+              <option value="<%= p.id_proker %>"><%= p.nama_proker %></option>
+          <% }) %>
+        </select>
+    </div>
+    <div class="pb-5">
+        <label class="block text-sm">Tanggal Pelaksanaan</label>
+        <input type="date" name="tanggal_pelaksanaan" class="w-full border rounded p-2" required />
+    </div>
+    <div class="pb-5">
+        <label class="block text-sm">Kendala</label>
+        <textarea name="kendala" class="w-full border rounded p-2"></textarea>
+    </div>
+    <div class="pb-5">
+        <label class="block text-sm">Jumlah Pelaksanaan</label>
+        <input type="number" name="jumlah_pelaksanaan" class="w-full border rounded p-2" />
+    </div>
+    <div class="pb-5">
+        <label class="block text-sm">Target</label>
+        <input type="text" name="target" class="w-full border rounded p-2" />
+    </div>
+    <div class="pb-5">
+        <label class="block text-sm">Revisi</label>
+        <textarea name="revisi" class="w-full border rounded p-2"></textarea>
+    </div>
+    <div class="pb-5">
+        <label class="block text-sm">Upload File</label>
+        <input type="file" name="file" class="w-full border rounded p-2" />
+    </div>
+    <button type="submit" class="bg-blue-800 text-white px-4 py-2 rounded">Simpan</button>
+</form>
+
+<%- include('../layout/footer')%>

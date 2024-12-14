@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
-      pj_proker: {
-        type: Sequelize.STRING(100),
-        allowNull: false,
-      },
+      // pj_proker: {
+      //   type: Sequelize.STRING(100),
+      //   allowNull: false,
+      // },
       kegiatan: {
         type: Sequelize.STRING(200),
         allowNull: false,
