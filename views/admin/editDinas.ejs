@@ -1,38 +1,34 @@
 <%- include('sidebar')%>
 <h2 class="card-title">Edit Dinas</h2>
 
-<form method="post" action="/admin/editDinas">
+<form method="post" action="/admin/editDinas/<%= dinas.id_dinas %>">
     <div class="form-control">
       <label class="label">
         <span class="label-text">Nama Dinas</span>
       </label>
-      <input type="text" placeholder="Nama Dinas" class="input input-bordered" name="nama_dinas" />
+      <input type="text" placeholder="Nama Dinas" class="input input-bordered" name="nama_dinas" value="<%= dinas.nama_dinas %>"/>
      
+    </div> 
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Username</span>
+      </label>
+      <input type="text" placeholder="Username" class="input input-bordered" name="username" value="<%= dinas.dataUser.username %>" />
     </div>
     <div class="form-control">
       <label class="label">
         <span class="label-text">Deskripsi</span>
       </label>
-      <input type="text" placeholder="Deskripsi" class="input input-bordered" name="deskripsi" />
-      
+      <input type="text" placeholder="Deskripsi" class="input input-bordered" name="deskripsi" value="<%= dinas.deskripsi %>" />
+    
     </div>
     <div class="form-control">
       <label class="label">
         <span class="label-text">Kepala Dinas</span>
       </label>
-      <input type="text" placeholder="Kepala Dinas" class="input input-bordered" name="nama_kadin"  />
+      <input type="text" placeholder="Kepala Dinas" class="input input-bordered" name="nama_kadin" value="<%= dinas.nama_kadin %>" />
      
     </div>
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text">Password</span>
-      </label>
-      <input type="text" placeholder="Password" class="input input-bordered" name="password" />
-      
-    </div>
-    
-    
-  
     <div class="form-control mt-6">
       <button type="submit" class="btn btn-primary">Edit</button>
     </div>

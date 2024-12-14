@@ -4,8 +4,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('kritik_saran', {
       id_kritikdansaran: {
-        type: Sequelize.CHAR(10),
+        type: Sequelize.STRING(10),
         primaryKey: true,
+        allowNull: false,
+      },
+      id_progres: {
+        type: Sequelize.STRING(10),
         allowNull: false,
       },
       isi: {

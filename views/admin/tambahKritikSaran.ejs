@@ -2,51 +2,105 @@
 <h2 class="card-title">Tambah Kritik dan Saran</h2>
 
 <form method="post" action="/admin/tambahKritikSaran">
-<div class="form-control">
-<div class="relative inline-block">
+  <!-- Dropdown Dinas -->
+  <div class="form-control">
     <label class="label">
-        <span class="label-text">Dinas</span>
-      </label>
-    <select class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-      <option>Pilih Dinas</option>
-      <option>Dinas A</option>
-      <option>Dinas B</option>
-      <option>Dinas C</option>
+      <span class="label-text">Dinas</span>
+    </label>
+    <select id="dinasSelect" class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded" required>
+      <option value="">Pilih Dinas</option>
+      <% dinas.forEach(item => { %>
+        <option value="<%= item.id_dinas %>"><%= item.nama_dinas %></option>
+      <% }) %>
     </select>
-    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-      <svg class="w-4 h-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M5.292 7.292a1 1 0 011.415 0L10 10.586l3.293-3.294a1 1 0 011.415 1.415l-4 4a1 1 0 01-1.415 0l-4-4a1 1 0 010-1.415z" clip-rule="evenodd" />
-      </svg>
-    </div>
-</div>
+  </div>
 
-<div class="relative inline-block">
+  <!-- Dropdown Program Kerja -->
+  <div class="form-control">
     <label class="label">
-        <span class="label-text">Program Kerja</span>
-      </label>
-    <select class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-      <option>Pilih Program Kerja</option>
-      <option>Dinas A</option>
-      <option>Dinas B</option>
-      <option>Dinas C</option>
+      <span class="label-text">Program Kerja</span>
+    </label>
+    <select id="prokerSelect" class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded" required>
+      <option value="">Pilih Program Kerja</option>
     </select>
-    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-      <svg class="w-4 h-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M5.292 7.292a1 1 0 011.415 0L10 10.586l3.293-3.294a1 1 0 011.415 1.415l-4 4a1 1 0 01-1.415 0l-4-4a1 1 0 010-1.415z" clip-rule="evenodd" />
-      </svg>
-    </div>
-</div>
-</div>
-<div class="form-control">
-  <label class="label">
-    <span class="label-text">Kritik dan Saran</span>
-  </label>
-  <input type="text" placeholder="Password" class="input input-bordered" name="password" />
-  
-</div>
-<div class="form-control mt-6">
-  <button type="submit" class="btn btn-primary">Tambah</button>
-</div>
+  </div>
+
+  <!-- Dropdown Progres -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Progres</span>
+    </label>
+    <select id="progresSelect" name="id_progres" class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded" required>
+      <option value="">Pilih Progres</option>
+    </select>
+  </div>
+
+  <!-- Input Kritik dan Saran -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Kritik dan Saran</span>
+    </label>
+    <input type="text" name="isi" placeholder="Masukkan kritik dan saran" class="input input-bordered" required />
+  </div>
+
+  <!-- Tombol Submit -->
+  <div class="form-control mt-6">
+    <button type="submit" class="btn btn-primary">Tambah</button>
+  </div>
 </form>
 
+<script>
+// Dropdown dinas -> proker
+document.getElementById('dinasSelect').addEventListener('change', async function () {
+    const idDinas = this.value;
+    const prokerSelect = document.getElementById('prokerSelect');
+    const progresSelect = document.getElementById('progresSelect');
+
+    prokerSelect.innerHTML = '<option value="">Pilih Program Kerja</option>';
+    progresSelect.innerHTML = '<option value="">Pilih Progres</option>';
+
+    if (idDinas) {
+        try {
+            const response = await fetch(`/admin/proker/${idDinas}`);
+            const proker = await response.json();
+            console.log('Program Kerja:', proker); // Debug data program kerja
+
+            proker.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id_proker;
+                option.textContent = item.nama_proker;
+                prokerSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching program kerja:', error);
+        }
+    }
+});
+
+// Dropdown proker -> progres
+document.getElementById('prokerSelect').addEventListener('change', async function () {
+    const idProker = this.value;
+    const progresSelect = document.getElementById('progresSelect');
+
+    progresSelect.innerHTML = '<option value="">Pilih Progres</option>';
+
+    if (idProker) {
+        try {
+            const response = await fetch(`/admin/progres/${idProker}`);
+            const progres = await response.json();
+            console.log('Progres:', progres); // Debug data progres
+
+            progres.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id_progres;
+                option.textContent = `${item.waktu_pelaksanaan} - ${item.target}`;
+                progresSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching progres:', error);
+        }
+    }
+});
+
+</script>
 <%- include('footer')%>
