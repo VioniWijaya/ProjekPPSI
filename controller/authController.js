@@ -15,6 +15,7 @@ const login = async (req, res) => {
             password
         } = req.body;
         console.log("iniloh", username, password);
+
 // yg lama
         // if (!username || !password) {
         //     return res.status(400).json({
@@ -28,6 +29,7 @@ const login = async (req, res) => {
                 maxAge: 5000,
                 httpOnly: true
             }).redirect("/login");
+
         }
 
         const user = await modelUser.findOne({
@@ -37,6 +39,7 @@ const login = async (req, res) => {
         });
         console.log("user.password", user.password);
         
+
         // yg lama
         // if (!user) {
         //     return res.status(400).json({
@@ -89,6 +92,7 @@ const login = async (req, res) => {
 
         const refreshToken = jwt.sign({
 
+
                 id: user.id_user,
 
                 username: user.username,
@@ -112,6 +116,7 @@ const login = async (req, res) => {
         res.redirect(getRedirectUrl(user.role));
     } catch (err) {
         console.error("Error during login: ", err);
+
         // res.status(500).json({
         //     message: "Internal server error"
         // });
@@ -119,6 +124,7 @@ const login = async (req, res) => {
             maxAge: 5000,
             httpOnly: true
         }).redirect("/login");
+
     }
 };
 
@@ -168,4 +174,3 @@ module.exports = {
     logout
 
 }
-

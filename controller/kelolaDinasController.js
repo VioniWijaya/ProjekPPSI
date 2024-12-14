@@ -120,8 +120,8 @@ const lihatDinas = async (req, res) => {
     res.render('admin/lihatDinas', {
         dinas,
         page: 'Lihat Dinas',
-    success: req.cookies.success,
-    error: req.cookies.error,
+        success: req.cookies.success,
+        error: req.cookies.error,
     });
 }
 
@@ -252,17 +252,93 @@ const hapusDinas = async (req, res) => {
     });
 
     let success = "Dinas Berhasil Di Hapus";
-
     res.cookie("success", success, {
         maxAge: 1000,
         httpOnly: true
     });
     res.redirect("/admin/lihatDinas");
 }
+
+const viewResetPassword = async(req,res)=>{
+    try {
+        const{
+            id
+        }= req.params
+        const dinas = await modelDinas.findByPk(id)
+        res.render('admin/editPasswordDinas', {
+            dinas,
+            page: 'Reset Password',
+            success: req.cookies.success,
+            error: req.cookies.error,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: error
+        })
+    }
+}
+
+const resetPassword = async (req, res) => {
+    try {
+        console.log("tes ini dia");
+        
+        const {
+            id
+        } = req.params
+        const {
+            password,
+            confirmPassword
+        } = req.body;
+        const dinas = await modelDinas.findByPk(id)
+        if (!dinas) {
+            return res.status(404).json({
+                success: false,
+                message: 'Dinas Tidak Ditemukan'
+            })
+        }
+        if (password != confirmPassword) {
+            let error = "Harap isi password dan confirmPasswordnya sama";
+            res.cookie("error", error, {
+                maxAge: 1000,
+                httpOnly: true
+            });
+            return res.status(400).redirect(`/admin/changePass/${dinas.id_dinas}`)
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // console.log(hashedPassword);
+        
+        const updatePass = await modelUser.update({
+            password: hashedPassword
+        },{
+            where:{
+                id_user: dinas.id_user
+            }
+        })
+        if (updatePass) {
+            let success = "Password Telah Diperbarui";
+            res.cookie("success", success, {
+                maxAge: 1000,
+                httpOnly: true
+            });
+            return res.status(200).redirect('/admin/lihatDinas')
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: error
+        })
+    }
+}
 module.exports = {
     tambahDinas,
     lihatDinas,
     editDinas,
     updateDinas,
-    hapusDinas
+    hapusDinas,
+    viewResetPassword,
+    resetPassword
 };
