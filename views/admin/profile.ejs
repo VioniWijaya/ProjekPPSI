@@ -1,0 +1,25 @@
+<%- include('sidebar')%>
+
+<div class="px-8 py-6 bg-white">
+    <form method="post" action="/admin/profile">
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Username</span>
+            </label>
+            <input type="text" placeholder="Username" class="input input-bordered" name="username" value="<%= user.username %>" required />
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Password</span>
+            </label>
+            <input type="password" placeholder="Password" class="input input-bordered" name="password" value="<%= user.password %>" required />
+          </div>
+
+        <div class="form-control mt-7">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+    </form>
+</div>
+
+<%- include('footer')%>
