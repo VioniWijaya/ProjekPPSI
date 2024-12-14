@@ -6,6 +6,7 @@ const { prokerController } = require('../controller');
 const { userController } = require('../controller');
 const progressController = require('../controller/progressController');
 const upload = require('../middleware/upload.middleware');
+const proker = require('../models/Proker');
 
 router.get('/',isLogin.verifyTokenAndRole(['dinas']), prokerController.dashboard);
 
@@ -15,6 +16,8 @@ router.post('/proker/create',isLogin.verifyTokenAndRole(['dinas']), prokerContro
 router.get('/proker/edit/:id',isLogin.verifyTokenAndRole(['dinas']), prokerController.edit);
 router.post('/proker/edit/:id',isLogin.verifyTokenAndRole(['dinas']), prokerController.update);
 router.get('/proker/view/:id',isLogin.verifyTokenAndRole(['dinas']), prokerController.view);
+
+  router.post('/hapusproker/:id', isLogin.verifyTokenAndRole(['dinas']), prokerController.hapusProker);
 
 router.get('/progress',isLogin.verifyTokenAndRole(['dinas']), progressController.index);
 router.get('/progress/create',isLogin.verifyTokenAndRole(['dinas']), progressController.create);

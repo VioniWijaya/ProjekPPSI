@@ -5,6 +5,9 @@ const Progress = require('../models/Progres');
 const Anggota = require('../models/Anggota');
 const Anggota_Proker = require('../models/Anggota_proker');
 const jwt = require('jsonwebtoken');
+const { where } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
 
 // const index = async (req, res) => {
 //     try {
@@ -304,6 +307,64 @@ const dashboardAdmin = async (req, res) => {
 }
 
 
+const hapusProker = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Cari Proker berdasarkan ID
+        const proker = await Proker.findByPk(id);
+        if (!proker) {
+            return res.status(404).json({
+                success: false,
+                message: 'Proker tidak ditemukan.'
+            });
+        }
+
+        // Cari semua Progres yang terkait dengan Proker
+        const progresList = await Progress.findAll({
+            where: { id_proker: proker.id_proker }
+        });
+
+        // Loop untuk menghapus file yang terkait (jika ada)
+        for (const progres of progresList) {
+            if (progres.file_upload) {
+                const oldFilePath = path.join(__dirname, '../public/images/', progres.file_upload);
+                fs.unlink(oldFilePath, (err) => {
+                    if (err) {
+                        console.error(`Gagal menghapus file: ${progres.file_upload}`, err);
+                    } else {
+                        console.log(`File berhasil dihapus: ${progres.file_upload}`);
+                    }
+                });
+            }
+        }
+
+        // Hapus semua Progres dari database
+        await Progress.destroy({
+            where: { id_proker: proker.id_proker }
+        });
+
+        // Hapus Proker setelah Progres terkait dihapus
+        await Proker.destroy({
+            where: { id_proker: proker.id_proker }
+        });
+
+        // Kirim respon berhasil
+        let success = "Proker dan semua progres terkait berhasil dihapus.";
+        res.cookie("success", success, {
+            maxAge: 1000,
+            httpOnly: true
+        });
+        res.redirect("/dinas/proker");
+    } catch (error) {
+        console.error("Terjadi kesalahan:", error);
+        res.status(500).json({
+            success: false,
+            message: "Terjadi kesalahan saat menghapus data."
+        });
+    }
+};
+
 module.exports = {
     index,
     view,
@@ -312,5 +373,6 @@ module.exports = {
     edit,
     update,
     dashboard,
-    dashboardAdmin
+    dashboardAdmin,
+    hapusProker
 }

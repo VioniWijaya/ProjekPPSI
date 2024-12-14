@@ -16,11 +16,31 @@
                     <span class="text-blue-800 font-medium"><%= proker.nama_proker %></span>
                     <div>
                         <a href="/dinas/proker/edit/<%= proker.id_proker %>" class="bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">Edit</a>
-                        <a href="/dinas/proker/view/<%= proker.id_proker %>" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>
+                        <a href="/dinas/proker/view/<%= proker.id_proker %>" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Lihat</a>  
+                        <label for="delete-modal-<%= proker.id_proker %>" class="btn btn-sm btn-error modal-button">Hapus</label>
+              
                     </div>
                 </div>
             <% }) %>
         </div>
     </div>
 </div>
+
+
+<% proker.forEach(item => { %>
+    <input type="checkbox" id="delete-modal-<%= item.id_proker %>" class="modal-toggle" />
+    <div class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
+        <p>Apakah Anda yakin ingin menghapus proker <%= item.nama_proker %>?</p>
+        <p>Semua data yang berhubungan dengan proker ini akan ikut terhapus.</p>
+        <div class="modal-action">
+          <form action="/dinas/hapusproker/<%= item.id_proker %>" method="post">
+            <button type="submit" class="btn btn-error">Ya, Hapus</button>
+          </form>
+          <label for="delete-modal-<%= item.id_proker %>" class="btn">Batal</label>
+        </div>
+      </div>
+    </div>
+  <% }) %>
 <%- include('../layout/footer.ejs')%>
