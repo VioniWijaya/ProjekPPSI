@@ -1943,6 +1943,7 @@ html {
 
 .pointer-events-none {
   pointer-events: none;
+
 }
 
 .absolute {
@@ -1961,6 +1962,7 @@ html {
 .start-0 {
   inset-inline-start: 0px;
 }
+
 
 .mx-auto {
   margin-left: auto;

@@ -1,6 +1,12 @@
 const express = require('express');
-const Progres = require('../models/Progres');
 const Proker = require('../models/Proker');
+const Dinas = require('../models/Dinas');
+const Progres = require('../models/Progres');
+const Anggota = require('../models/Anggota');
+const Anggota_Proker = require('../models/Anggota_proker');
+const jwt = require('jsonwebtoken');
+const multer = require("multer");
+
 
 const index = async (req, res) => {
     month = res.body ? res.body.month : new Date().getMonth() + 1;
@@ -18,24 +24,132 @@ const index = async (req, res) => {
     }
 }
 
-const upload = async (req, res) => {
+
+
+
+// const create = async (req, res) => {
+//     try {
+//         const anggota = await Anggota.findAll();
+//         res.render('dinas/progress/create', {anggota});
+//     } catch (error) {
+//         console.error(error.message);
+//     }
+// }
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/'); 
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + '-' + file.originalname);
+    }
+});
+
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "application/pdf"
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error("Invalid file type, only JPEG, PNG, and PDF is allowed!"),
+      false
+    );
+  }
+};
+
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5, 
+  },
+  fileFilter: fileFilter,
+});
+
+
+// const create = async (req, res) => {
+//     try {
+//         const proker = await Proker.findAll({
+//             attributes: ['id_proker', 'nama_proker'], // Ambil hanya id_proker dan nama_proker
+//         });
+//         res.render('dinas/progress/create', { proker }); // Kirim data ke view
+//     } catch (error) {
+//         console.error(error.message);
+//     }
+// };
+
+const create = async (req, res) => {
     try {
-        res.render('dinas/progress/upload');
+        
+        // Dapatkan program kerja hanya dari dinas yang login
+        const proker = await Proker.findAll({
+            // where: { id_dinas },  // Filter berdasarkan dinas
+            attributes: ['id_proker', 'nama_proker'], 
+        });
+
+        res.render('dinas/progress/create', { proker });
     } catch (error) {
         console.error(error.message);
+        res.status(500).send('Terjadi kesalahan pada server.');
     }
-}
-const allProgress = async (req, res) => {
+};
+
+
+const store = async (req, res) => {
+    const {
+        id_proker,
+        tanggal_pelaksanaan,
+        kendala,
+        jumlah_pelaksanaan,
+        target,
+        revisi,
+    } = req.body;
+
     try {
-        res.render('dinas/progress/allProgress');
+        // Validasi data input
+        if (!id_proker || !tanggal_pelaksanaan) {
+            throw new Error('ID Program Kerja dan Tanggal Pelaksanaan wajib diisi.');
+        }
+
+        // Simpan data ke database
+        const progress = await Progres.create({
+            id_progress: generateProgress(), // ID unik
+            id_proker,
+            tanggal_pelaksanaan,
+            kendala,
+            jumlah_pelaksanaan: jumlah_pelaksanaan || null, // Nilai default null jika tidak diisi
+            target,
+            revisi,
+            file: req.file ? req.file.filename : null, // Nama file dari multer
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+
+        res.redirect('/dinas/progress'); // Redirect setelah sukses
     } catch (error) {
         console.error(error.message);
+
+        // Hapus file jika terjadi error setelah upload
+        if (req.file) {
+            const fs = require('fs');
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.error('Gagal menghapus file:', err.message);
+            });
+        }
+
+        res.status(500).send('Terjadi kesalahan pada server.');
     }
-}
+};
 
 
 module.exports = {
     index,
-    upload,
-    allProgress
+    create,
+    store,
+    upload
 }

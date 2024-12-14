@@ -2,12 +2,15 @@ var express = require('express');
 var router = express.Router();
 const islogin = require('../middleware/islogin.middleware')
 const controllerDinas = require('../controller/kelolaDinasController')
+
 const controllerAdmin = require('../controller/adminController');
 const controllerProker = require('../controller/prokerController');
 const controllerKritikSaran = require('../controller/kelolaKritikSaranController')
 const Proker = require('../models/Proker');
 const Progres = require('../models/Progres');
 
+
+const controllerKritikSaran = require('../controller/kelolaKritikSaranController')
 
 router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => {
     res.render('admin/tambahDinas'); // Pastikan ini sesuai dengan nama file
@@ -16,7 +19,8 @@ router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => 
   router.get('/lihatDinas',islogin.verifyTokenAndRole(['admin']), controllerDinas.lihatDinas);
 
   router.get('/editDinas/:id',islogin.verifyTokenAndRole(['admin']), controllerDinas.editDinas);
-
+  router.get('/changePass/:id', islogin.verifyTokenAndRole(['admin']), controllerDinas.viewResetPassword)
+  router.post('/changePass/:id', islogin.verifyTokenAndRole(['admin']), controllerDinas.resetPassword)
   router.get('/lihatProgres',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.lihatProgres);
 
   router.get('/kritikSaran',islogin.verifyTokenAndRole(['admin']), controllerKritikSaran.lihatKritikSaran);
