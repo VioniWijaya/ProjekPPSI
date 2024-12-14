@@ -1,43 +1,54 @@
-<%- include('../layout/sidebar')%>
+<%- include('../layout/sidebar') %>
 
-<h1 class="text-3xl font-bold pb-5">edit Progress Proker</h1>
+<h1 class="text-3xl font-bold pb-5">Edit Progress Proker</h1>
 
-<form method="post" action="/progress/upload" >
-    <!-- <div class="p-10"> -->
-        <div class="pb-5">
-          <label class="block text-sm">Program kerja</label>
-          <select class="w-full border rounded p-2">
-            <option>Pilih Program Kerja</option>
-          </select>
-        </div>
-        <div class="pb-5">
-          <label class="block text-sm">Tanggal Pelaksanaan</label>
-          <input type="date" class="w-full border rounded p-2" />
-        </div>
-        <div  class="pb-5">
-          <label class="block text-sm">Kendala</label>
-          <textarea class="w-full border rounded p-2"></textarea>
-        </div>
-        <div class="pb-5">
-          <label class="block text-sm">Jumlah Pelaksanaan</label>
-          <input type="number" class="w-full border rounded p-2" />
-        </div>
-        <div class="pb-5">
-          <label class="block text-sm">Target</label>
-          <input type="text" class="w-full border rounded p-2" />
-        </div>
-        <div class="pb-5">
-          <label class="block text-sm">Revisi</label>
-          <textarea class="w-full border rounded p-2"></textarea>
-        </div>
-        <div class="pb-5">
-          <label class="block text-sm">Upload file</label>
-          <input type="file" class="w-full border rounded p-2" />
-        </div>
-        <button type="submit" class="bg-blue-800 text-white px-4 py-2 rounded">Simpan Perubahan</button>
-      </form>
+<form method="post" action="/dinas/progress/update/<%= progres.id_progres %>" enctype="multipart/form-data">
+  <div class="pb-5">
+    <label class="block text-sm">Program Kerja</label>
+    <select class="w-full border rounded p-2" name="id_proker" required>
+      <option value="">Pilih Program Kerja</option>
+      <% proker.forEach(p => { %>
+      <option value="<%= p.id_proker %>" <%= progres.id_proker === p.id_proker ? 'selected' : '' %>>
+        <%= p.nama_proker %>
+      </option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">Tanggal Pelaksanaan</label>
+    <input type="date" name="tanggal_pelaksanaan" class="w-full border rounded p-2"
+      value="<%= progres.tanggal_pelaksanaan%>" required />
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">Kendala</label>
+    <textarea name="kendala" class="w-full border rounded p-2"><%= progres.kendala %></textarea>
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">Jumlah Pelaksanaan</label>
+    <input type="number" name="jumlah_pelaksanaan" class="w-full border rounded p-2"
+      value="<%= progres.jumlah_pelaksanaan %>" />
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">Target</label>
+    <input type="text" name="target" class="w-full border rounded p-2" value="<%= progres.target %>" />
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">Revisi</label>
+    <textarea name="revisi" class="w-full border rounded p-2"><%= progres.revisi %></textarea>
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">File Sebelumnya</label>
+    <% if (progres.file_upload) { %>
+    <p><a href="/images/<%= progres.file_upload %>" target="_blank">Lihat File Sebelumnya</a></p>
+    <% } else { %>
+    <p>File tidak tersedia</p>
+    <% } %>
+  </div>
+  <div class="pb-5">
+    <label class="block text-sm">Upload File Baru</label>
+    <input type="file" name="file" class="w-full border rounded p-2" />
+  </div>
+  <button type="submit" class="bg-blue-800 text-white px-4 py-2 rounded">Simpan Perubahan</button>
+</form>
 
-
-
-
-<%- include('../layout/footer')%>
+<%- include('../layout/footer') %>

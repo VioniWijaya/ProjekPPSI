@@ -157,9 +157,142 @@ const store = async (req, res) => {
     }
 };
 
+const editProgres = async (req, res) => {
+    try {
+        const { id } = req.params;
 
+        // Ambil data progres berdasarkan ID
+        const progres = await Progres.findByPk(id, {
+            include: [
+                {
+                    model: Proker,
+                    as: 'dataProker',
+                },
+            ],
+        });
+
+        // Ambil data semua program kerja untuk dropdown
+        const idUser = req.user.id;
+        // Dapatkan program kerja hanya dari dinas yang login
+        const dinas = await Dinas.findOne({
+            where:{
+                id_user: idUser
+            }
+        })
+        
+        const proker = await Proker.findAll({
+            where: { id_dinas: dinas.id_dinas },  // Filter berdasarkan dinas
+            attributes: ['id_proker', 'nama_proker'], 
+        });
+
+        if (!progres) {
+            return res.status(404).render('admin/editProgres', {
+                success: false,
+                message: 'Data progres tidak ditemukan.',
+            });
+        }
+
+        // Render halaman edit dengan data progres
+        res.render('dinas/progress/edit', { progres, proker });
+    } catch (error) {
+        console.error("Error fetching edit progres: ", error);
+        res.status(500).send('Terjadi kesalahan pada server.');
+    }
+};
+
+const updateProgres = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            id_proker,
+            tanggal_pelaksanaan,
+            kendala,
+            jumlah_pelaksanaan,
+            target,
+            revisi,
+        } = req.body;
+
+        // Ambil data lama progres
+        const progres = await Progres.findByPk(id);
+
+        if (!progres) {
+            return res.status(404).send('Data progres tidak ditemukan.');
+        }
+
+        // Update file jika ada file baru yang diunggah
+        let fileName = progres.file_upload;
+        if (req.file) {
+            // Hapus file lama jika ada
+            const fs = require('fs');
+            if (fileName) {
+                const oldPath = `public/images/${fileName}`;
+                if (fs.existsSync(oldPath)) {
+                    fs.unlinkSync(oldPath);
+                }
+            }
+
+            // Simpan nama file baru
+            fileName = req.file.filename;
+        }
+
+        // Update data progres
+        await progres.update({
+            id_proker,
+            tanggal_pelaksanaan,
+            kendala,
+            jumlah_pelaksanaan: jumlah_pelaksanaan || null,
+            target,
+            revisi,
+            file_upload: fileName,
+        });
+
+        res.redirect('/dinas/progress'); // Redirect ke halaman progress
+    } catch (error) {
+        console.error("Error updating progres: ", error);
+
+        res.status(500).send('Terjadi kesalahan pada server.');
+    }
+};
+
+const lihatDetailProgres = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+
+        // Ambil data progres berdasarkan ID
+        const progres = await Progres.findByPk(id, {
+            include: [{
+                model: Proker,
+                as: 'dataProker',
+            }, ],
+        });
+
+        // Jika data tidak ditemukan
+        if (!progres) {
+            return res.status(404).render('dinas/progress', {
+                success: false,
+                message: 'Data progres tidak ditemukan.',
+            });
+        }
+
+        // Render view dengan data progres
+        res.render('dinas/progress/view', {
+            progres
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan pada server.'
+        });
+    }
+}
 module.exports = {
     index,
     create,
     store,
+    editProgres,
+    updateProgres,
+    lihatDetailProgres
 }
