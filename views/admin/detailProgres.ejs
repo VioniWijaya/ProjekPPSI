@@ -1,0 +1,53 @@
+<%- include('sidebar')%>
+<h2 class="card-title">Detail Progres Program Kerja</h2>
+
+<!-- <form method="post" action="/admin/detailProgres"> -->
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Nama Program Kerja</span>
+        </label>
+        <input type="text" placeholder="<%= progres.dataProker.nama_proker %>" class="input input-bordered" name="<%= progres.dataProker.nama_proker %>" readonly/>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Waktu Pelaksanaan</span>
+        </label>
+        <input type="text" placeholder="<%= progres.waktu_pelaksanaan %>" class="input input-bordered" name="waktu_pelaksanaan" readonly/>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Kendala</span>
+        </label>
+        <input type="text" placeholder="<%= progres.kendala %>" class="input input-bordered" name="kendala" readonly/>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Target</span>
+        </label>
+        <input type="text" placeholder="<%= progres.target %>" class="input input-bordered" name="target" readonly/>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Revisi</span>
+        </label>
+        <input type="text" placeholder="<%= progres.revisi %>" class="input input-bordered" name="revisi" readonly/>
+    </div>
+
+<!-- Tampilkan file jika ada -->
+<% if (progres.file_upload) { %>
+    <p>File:</p>
+    <% if (progres.file_upload.endsWith('.jpg') || progres.file_upload.endsWith('.png') || progres.file_upload.endsWith('.jpeg')) { %>
+        <img src="/images/<%= progres.file_upload %>" alt="Progres File" style="max-width: 300px; height: auto;">
+    <% } else if (progres.file_upload.endsWith('.pdf')) { %>
+        <a href="/images/<%= progres.file_upload %>" target="_blank">Lihat File PDF</a>
+    <% } else { %>
+        <p>Format file tidak didukung untuk ditampilkan.</p>
+    <% } %>
+<% } else { %>
+    <p>File tidak tersedia.</p>
+<% } %>
+    <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary" onclick="window.location.href='/admin/lihatProgres'; ">Tutup</button>
+    </div>
+<!-- </form> -->
+<%- include('footer')%>
