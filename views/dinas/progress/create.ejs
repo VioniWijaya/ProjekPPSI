@@ -1,15 +1,15 @@
-<%- include('../layout/sidebar')%>
+<%- include('../layout/sidebar') %>
 
 <h1 class="text-3xl font-bold pb-5">Upload Progress Proker</h1>
 
-<form method="post" action="/progress/create" enctype="multipart/form-data">
+<form method="post" action="/dinas/progress/create" enctype="multipart/form-data">
     <div class="pb-5">
         <label class="block text-sm">Program Kerja</label>
         <select class="w-full border rounded p-2" name="id_proker" required>
-          <option value="">Pilih Program Kerja</option>
-          <% proker.forEach(p => { %>
-              <option value="<%= p.id_proker %>"><%= p.nama_proker %></option>
-          <% }) %>
+            <option value="">Pilih Program Kerja</option>
+            <% proker.forEach(p => { %>
+                <option value="<%= p.id_proker %>"><%= p.nama_proker %></option>
+            <% }) %>
         </select>
     </div>
     <div class="pb-5">
@@ -17,7 +17,7 @@
         <input type="date" name="tanggal_pelaksanaan" class="w-full border rounded p-2" required />
     </div>
     <div class="pb-5">
-        <label class="block text-sm">Kendala</label>
+        <label class="block text-sm">Agenda</label>
         <textarea name="kendala" class="w-full border rounded p-2"></textarea>
     </div>
     <div class="pb-5">
@@ -39,4 +39,4 @@
     <button type="submit" class="bg-blue-800 text-white px-4 py-2 rounded">Simpan</button>
 </form>
 
-<%- include('../layout/footer')%>
+<%- include('../layout/footer') %>

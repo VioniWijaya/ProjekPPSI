@@ -10,7 +10,7 @@ const Proker = require('../models/Proker');
 const Progres = require('../models/Progres');
 
 
-const controllerKritikSaran = require('../controller/kelolaKritikSaranController')
+// const controllerKritikSaran = require('../controller/kelolaKritikSaranController')
 
 router.get('/tambahDinas',islogin.verifyTokenAndRole(['admin']),  (req, res) => {
     res.render('admin/tambahDinas'); // Pastikan ini sesuai dengan nama file

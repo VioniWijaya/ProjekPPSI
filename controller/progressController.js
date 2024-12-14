@@ -36,40 +36,40 @@ const index = async (req, res) => {
 //     }
 // }
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/images/'); 
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + '-' + file.originalname);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'public/images/'); 
+//     },
+//     filename: function (req, file, cb) {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//         cb(null, uniqueSuffix + '-' + file.originalname);
+//     }
+// });
 
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/png" ||
-    file.mimetype === "application/pdf"
-  ) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error("Invalid file type, only JPEG, PNG, and PDF is allowed!"),
-      false
-    );
-  }
-};
+// const fileFilter = (req, file, cb) => {
+//   if (
+//     file.mimetype === "image/jpeg" ||
+//     file.mimetype === "image/png" ||
+//     file.mimetype === "application/pdf"
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb(
+//       new Error("Invalid file type, only JPEG, PNG, and PDF is allowed!"),
+//       false
+//     );
+//   }
+// };
 
 
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5, 
-  },
-  fileFilter: fileFilter,
-});
+// const upload = multer({
+//   storage: storage,
+//   limits: {
+//     fileSize: 1024 * 1024 * 5, 
+//   },
+//   fileFilter: fileFilter,
+// });
 
 
 // const create = async (req, res) => {
@@ -85,13 +85,19 @@ const upload = multer({
 
 const create = async (req, res) => {
     try {
-        
+        const idUser = req.user.id;
         // Dapatkan program kerja hanya dari dinas yang login
+        const dinas = await Dinas.findOne({
+            where:{
+                id_user: idUser
+            }
+        })
+        
         const proker = await Proker.findAll({
-            // where: { id_dinas },  // Filter berdasarkan dinas
+            where: { id_dinas: dinas.id_dinas },  // Filter berdasarkan dinas
             attributes: ['id_proker', 'nama_proker'], 
         });
-
+        
         res.render('dinas/progress/create', { proker });
     } catch (error) {
         console.error(error.message);
@@ -115,17 +121,22 @@ const store = async (req, res) => {
         if (!id_proker || !tanggal_pelaksanaan) {
             throw new Error('ID Program Kerja dan Tanggal Pelaksanaan wajib diisi.');
         }
-
+        const generateProgress= ()=>{
+            const prefix = 'Prog';
+            const timestampPart = Date.now().toString().slice(-6);
+            return `${prefix}${timestampPart}`;
+        }
+        
         // Simpan data ke database
         const progress = await Progres.create({
-            id_progress: generateProgress(), // ID unik
+            id_progres: generateProgress(), // ID unik
             id_proker,
-            tanggal_pelaksanaan,
+            waktu_pelaksanaan: tanggal_pelaksanaan,
             kendala,
             jumlah_pelaksanaan: jumlah_pelaksanaan || null, // Nilai default null jika tidak diisi
             target,
             revisi,
-            file: req.file ? req.file.filename : null, // Nama file dari multer
+            file_upload: req.file ? req.file.filename : null, // Nama file dari multer
             createdAt: new Date(),
             updatedAt: new Date(),
         });
@@ -151,5 +162,4 @@ module.exports = {
     index,
     create,
     store,
-    upload
 }

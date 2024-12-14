@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const isLogin = require('../middleware/islogin.middleware');
 const { prokerController } = require('../controller');
-const { progressController, upload } = require('../controller');
+// const { progressController, upload } = require('../controller');
 const { userController } = require('../controller');
-
+const { progressController } = require('../controller');
+const upload = require('../middleware/upload.middleware');
 
 router.get('/', prokerController.dashboard);
 
@@ -15,9 +16,9 @@ router.get('/proker/edit/:id', prokerController.edit);
 router.post('/proker/edit/:id', prokerController.update);
 router.get('/proker/view/:id', prokerController.view);
 
-router.get('/progress', progressController.index);
-router.get('/progress/create', progressController.create);
-router.post('/progress/create', upload.single('file'), progressController.store);
+router.get('/progress',isLogin.verifyTokenAndRole(['dinas']), progressController.index);
+router.get('/progress/create',isLogin.verifyTokenAndRole(['dinas']), progressController.create);
+router.post('/progress/create', isLogin.verifyTokenAndRole(['dinas']), upload.single('file'), progressController.store);
 router.get('/profile', userController.profile);
 router.post('/profile', userController.updateProfile);
 
