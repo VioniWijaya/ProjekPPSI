@@ -16,16 +16,14 @@ const {
 const lihatProgres = async (req, res) => {
     try {
         const progres = await modelProgres.findAll({
-            include: [
-                {
-                    model: modelProker,  // Including "proker" through "progres"
-                    as: 'dataProker',
-                    include: [{
-                        model: modelDinas,  // Including "dinas" through "proker"
-                        as: 'dataDinas'
-                    }]
-                }
-            ]
+            include: [{
+                model: modelProker, // Including "proker" through "progres"
+                as: 'dataProker',
+                include: [{
+                    model: modelDinas, // Including "dinas" through "proker"
+                    as: 'dataDinas'
+                }]
+            }]
         });
 
         res.render('admin/lihatProgres', {
@@ -43,24 +41,55 @@ const lihatProgres = async (req, res) => {
     }
 };
 
+const lihatDetailProgres = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
 
+        // Ambil data progres berdasarkan ID
+        const progres = await modelProgres.findByPk(id, {
+            include: [{
+                model: modelProker,
+                as: 'dataProker',
+            }, ],
+        });
+
+        // Jika data tidak ditemukan
+        if (!progres) {
+            return res.status(404).render('admin/detailProgres', {
+                success: false,
+                message: 'Data progres tidak ditemukan.',
+            });
+        }
+
+        // Render view dengan data progres
+        res.render('admin/detailProgres', {
+            progres
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan pada server.'
+        });
+    }
+}
 const lihatKritikSaran = async (req, res) => {
     try {
         const kritik_saran = await modelKritikSaran.findAll({
-            include: [
-                {
-                    model: modelProgres,  // Including the "progres" model
-                    as: 'dataProgres',
+            include: [{
+                model: modelProgres, // Including the "progres" model
+                as: 'dataProgres',
+                include: [{
+                    model: modelProker, // Including "proker" through "progres"
+                    as: 'dataProker',
                     include: [{
-                        model: modelProker,  // Including "proker" through "progres"
-                        as: 'dataProker',
-                        include: [{
-                            model: modelDinas,  // Including "dinas" through "proker"
-                            as: 'dataDinas'
-                        }]
+                        model: modelDinas, // Including "dinas" through "proker"
+                        as: 'dataDinas'
                     }]
-                }
-            ]
+                }]
+            }]
         });
 
         res.render('admin/kritikSaran', {
@@ -78,11 +107,10 @@ const lihatKritikSaran = async (req, res) => {
     }
 };
 
-const viewTambahKritikSaran = async(req,res)=>{
+const viewTambahKritikSaran = async (req, res) => {
     try {
         const progres = await modelProker.findAll({
-            include: [
-                {
+            include: [{
                     model: modelProgres, // Including "progres" through "proker"
                     as: 'dataProgres',
                 },
@@ -111,39 +139,54 @@ const viewTambahKritikSaran = async(req,res)=>{
 
 // API untuk mendapatkan program kerja berdasarkan dinas
 const prokerbydinas = async (req, res) => {
-    const { idDinas } = req.params;
+    const {
+        idDinas
+    } = req.params;
     try {
         const proker = await modelProker.findAll({
-            where: { id_dinas: idDinas },
+            where: {
+                id_dinas: idDinas
+            },
             attributes: ['id_proker', 'nama_proker'],
         });
         res.json(proker);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching program kerja.' });
+        res.status(500).json({
+            message: 'Error fetching program kerja.'
+        });
     }
 };
 
 // API untuk mendapatkan progres berdasarkan program kerja
-const progresbyproker =async (req, res) => {
-    const { idProker } = req.params;
+const progresbyproker = async (req, res) => {
+    const {
+        idProker
+    } = req.params;
     try {
         const progres = await modelProgres.findAll({
-            where: { id_proker: idProker },
+            where: {
+                id_proker: idProker
+            },
             attributes: ['id_progres', 'waktu_pelaksanaan', 'target'],
         });
         res.json(progres);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error fetching progres.' });
+        res.status(500).json({
+            message: 'Error fetching progres.'
+        });
     }
 };
 
 const tambahKritikSaran = async (req, res) => {
     try {
         console.log(req.body);
-        
-        const { id_progres, isi } = req.body;
+
+        const {
+            id_progres,
+            isi
+        } = req.body;
 
         // Validasi input
         if (!id_progres || !isi) {
@@ -154,7 +197,11 @@ const tambahKritikSaran = async (req, res) => {
         }
 
         // Validasi ID Progres (Opsional)
-        const progres = await modelProgres.findOne({ where: { id_progres } });
+        const progres = await modelProgres.findOne({
+            where: {
+                id_progres
+            }
+        });
         if (!progres) {
             return res.status(404).json({
                 success: false,
@@ -221,93 +268,103 @@ const hapusKritikSaran = async (req, res) => {
     res.redirect("/admin/kritikSaran");
 }
 const getEditKritikSaran = async (req, res) => {
-    const { id } = req.params; // Ambil ID kritik dan saran dari URL
-  
+    const {
+        id
+    } = req.params; // Ambil ID kritik dan saran dari URL
+
     try {
-      // Ambil data kritik_saran beserta progres, proker, dan dinas terkait
-      const kritikSaran = await modelKritikSaran.findOne({
-        where: { id_kritikdansaran: id },
-        include: [
-          {
-            model: modelProgres,
-            as: 'dataProgres',
-            include: [
-              {
-                model: modelProker,
-                as: 'dataProker',
-                include: [
-                  {
-                    model: modelDinas,
-                    as: 'dataDinas',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-  
-      if (!kritikSaran) {
-        return res.status(404).send('Data Kritik dan Saran tidak ditemukan');
-      }
-  
-      // Ambil semua dinas untuk dropdown
-      const dinas = await modelDinas.findAll({
-        include: [{ model: modelUser, as: 'dataUser' }],
-      });
-  
-      // Ambil program kerja berdasarkan dinas terkait
-      const proker = await modelProker.findAll({
-        where: { id_dinas: kritikSaran.dataProgres.dataProker.id_dinas },
-      });
-  
-      // Ambil progres berdasarkan proker terkait
-      const progres = await modelProgres.findAll({
-        where: { id_proker: kritikSaran.dataProgres.id_proker },
-      });
-      console.log(progres);
-      console.log(proker);
-      console.log(dinas);
-      
-      // Kirim data ke view edit
-      res.render('admin/editKritikSaran', {
-        kritikSaran,
-        dinas,
-        proker,
-        progres,
-      });
+        // Ambil data kritik_saran beserta progres, proker, dan dinas terkait
+        const kritikSaran = await modelKritikSaran.findOne({
+            where: {
+                id_kritikdansaran: id
+            },
+            include: [{
+                model: modelProgres,
+                as: 'dataProgres',
+                include: [{
+                    model: modelProker,
+                    as: 'dataProker',
+                    include: [{
+                        model: modelDinas,
+                        as: 'dataDinas',
+                    }, ],
+                }, ],
+            }, ],
+        });
+
+        if (!kritikSaran) {
+            return res.status(404).send('Data Kritik dan Saran tidak ditemukan');
+        }
+
+        // Ambil semua dinas untuk dropdown
+        const dinas = await modelDinas.findAll({
+            include: [{
+                model: modelUser,
+                as: 'dataUser'
+            }],
+        });
+
+        // Ambil program kerja berdasarkan dinas terkait
+        const proker = await modelProker.findAll({
+            where: {
+                id_dinas: kritikSaran.dataProgres.dataProker.id_dinas
+            },
+        });
+
+        // Ambil progres berdasarkan proker terkait
+        const progres = await modelProgres.findAll({
+            where: {
+                id_proker: kritikSaran.dataProgres.id_proker
+            },
+        });
+        console.log(progres);
+        console.log(proker);
+        console.log(dinas);
+
+        // Kirim data ke view edit
+        res.render('admin/editKritikSaran', {
+            kritikSaran,
+            dinas,
+            proker,
+            progres,
+        });
     } catch (error) {
-      console.error('Error fetching data:', error);
-      res.status(500).send('Terjadi kesalahan server');
+        console.error('Error fetching data:', error);
+        res.status(500).send('Terjadi kesalahan server');
     }
-  };
-  
-  const postEditKritikSaran = async (req, res) => {
-    const { id } = req.params; // Ambil ID kritik dan saran dari URL
-    const { id_progres, isi } = req.body; // Ambil input form
-  
-    try {
-      // Cari data kritik_saran berdasarkan ID
-      const kritikSaran = await modelKritikSaran.findByPk(id);
-  
-      if (!kritikSaran) {
-        return res.status(404).send('Data Kritik dan Saran tidak ditemukan');
-      }
-  
-      // Update data kritik_saran
-      await kritikSaran.update({
+};
+
+const postEditKritikSaran = async (req, res) => {
+    const {
+        id
+    } = req.params; // Ambil ID kritik dan saran dari URL
+    const {
         id_progres,
-        isi,
-      });
-  
-      // Redirect ke halaman daftar kritik dan saran
-      res.redirect('/admin/kritikSaran'); // Sesuaikan dengan URL daftar kritik dan saran
+        isi
+    } = req.body; // Ambil input form
+
+    try {
+        // Cari data kritik_saran berdasarkan ID
+        const kritikSaran = await modelKritikSaran.findByPk(id);
+
+        if (!kritikSaran) {
+            return res.status(404).send('Data Kritik dan Saran tidak ditemukan');
+        }
+
+        // Update data kritik_saran
+        await kritikSaran.update({
+            id_progres,
+            isi,
+        });
+
+        // Redirect ke halaman daftar kritik dan saran
+        res.redirect('/admin/kritikSaran'); // Sesuaikan dengan URL daftar kritik dan saran
     } catch (error) {
-      console.error('Error updating data:', error);
-      res.status(500).send('Terjadi kesalahan server');
+        console.error('Error updating data:', error);
+        res.status(500).send('Terjadi kesalahan server');
     }
-  };
-  
+};
+
 module.exports = {
     lihatProgres,
     lihatKritikSaran,
@@ -317,5 +374,6 @@ module.exports = {
     tambahKritikSaran,
     hapusKritikSaran,
     getEditKritikSaran,
-    postEditKritikSaran
+    postEditKritikSaran,
+    lihatDetailProgres
 };

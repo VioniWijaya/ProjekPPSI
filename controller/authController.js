@@ -131,7 +131,7 @@ const login = async (req, res) => {
 function getRedirectUrl(role) {
     switch (role) {
         case "admin":
-            return "/admin/lihatDinas";
+            return "/admin/dashboardAdmin";
         case "dinas":
             return "/dinas";
         default:
