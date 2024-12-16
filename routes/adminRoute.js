@@ -54,15 +54,36 @@ router.get('/dashboardAdmin', islogin.verifyTokenAndRole(['admin']), async (req,
         const count = await Progres.count();
         return count;
       }
+      async function getTerlaksanaCount() {
+        const count = await Proker.count({ where: { status: 'terlaksana' } });
+        console.log(count);
+        return count;
+      }
+      
+      async function getBerjalanCount() {
+        const count = await Proker.count({ where: { status: 'berjalan' } });
+        return count;
+      }
+      
+      async function getBelumTerlaksanaCount() {
+        const count = await Proker.count({ where: { status: 'belum terlaksana' } });
+        return count;
+      }
+      
       // // Data contoh (gantilah ini dengan data asli dari database atau logika Anda)
+      const terlaksana = await getTerlaksanaCount();  // Ambil jumlah item terlaksana
+      const berjalan = await getBerjalanCount();      // Ambil jumlah item sedang berjalan
+      const belumTerlaksana = await getBelumTerlaksanaCount(); // Ambil jumlah item belum terlaksana
       const proker = await getProkerCount();  // Ambil jumlah item terlaksana
       const dinas = await getDinasCount();      // Ambil jumlah item sedang dinas
       const progress = await getProgressCount();      // Ambil jumlah item progres
       res.render('admin/dashboardAdmin', {
         proker,
         dinas,
-        
-        progress
+        progress,
+        terlaksana,
+        berjalan,
+        belumTerlaksana
       });
   } catch (error) {
       console.error(error);
