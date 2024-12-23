@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const cookieParser = require("cookie-parser");
 const logger = require('morgan');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // const authRouter = require("./routes/authRoute");
 const router = require('./routes');
@@ -57,9 +57,9 @@ module.exports = app;
 //   res.status(404).render("notfound");
 // });
 
-// // Mulai server
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
+// Mulai server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
-// module.exports = app; 
+module.exports = app; 

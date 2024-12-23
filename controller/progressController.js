@@ -8,23 +8,38 @@ const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const fs = require('fs');
 const path = require('path');
+const { Op, fn, col, where } = require('sequelize');
 
 
 const index = async (req, res) => {
-    month = res.body ? res.body.month : new Date().getMonth() + 1;
+    const month = req.query.month || (new Date().getMonth() + 1); // Default bulan sekarang
+    const year = req.query.year || new Date().getFullYear(); // Default tahun sekarang
+
+    console.log('Filter Params:', { year, month }); // Log filter parameter
+
     try {
+        // Query untuk progress dengan filter tanggal
         const progress = await Progres.findAll({
+            where: where(
+                fn('DATE_FORMAT', col('waktu_pelaksanaan'), '%Y-%m'), 
+                `${year}-${month.toString().padStart(2, '0')}`
+            ),
             include: {
                 model: Proker,
                 attributes: ['nama_proker'],
                 as: 'dataProker'
             }
         });
-        res.render('dinas/progress/index', {progress, month});
+
+        console.log('Generated Query:', `${year}-${month.toString().padStart(2, '0')}`); // Log query yang dihasilkan
+        console.log('Query Results:', progress); // Log hasil query
+
+        res.render('dinas/progress/index', { progress, month, year });
     } catch (error) {
-        console.error(error.message);
+        console.error('Error fetching progress:', error.message);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 
 
