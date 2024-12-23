@@ -5,9 +5,11 @@ const Progress = require('../models/Progres');
 const Anggota = require('../models/Anggota');
 const Anggota_Proker = require('../models/Anggota_proker');
 const jwt = require('jsonwebtoken');
-const { where } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+
+const { Op, fn, col, where } = require('sequelize'); // Pastikan `where` diimpor jika belum
+
 
 // const index = async (req, res) => {
 //     try {
@@ -21,24 +23,29 @@ const path = require('path');
 
 
 const index = async (req, res) => {
-    try {
-        const id_user = await getIdUser(req, res);
-        const dinas = await Dinas.findOne({
-            where: {
-                id_user
-            }
-        });
+    const month = req.query.month || new Date().getMonth() + 1; // Default ke bulan sekarang jika tidak ada bulan
+    const year = req.query.year || new Date().getFullYear(); // Default ke tahun sekarang jika tidak ada tahun
 
+    try {
+        console.log('Filter Params:', { year, month }); // Log parameter filter
+
+        // Mengambil Progres dengan filter berdasarkan bulan dan tahun
         const proker = await Proker.findAll({
-            where: {
-                id_dinas: dinas.id_dinas, // Only fetch proker for the current dinas
-            }
         });
-        res.render('dinas/proker/index', {proker});
+      
+
+        res.render('dinas/proker/index', { proker, month, year }); // Kirim data `year` ke view jika dibutuhkan
     } catch (error) {
-        console.error(error.message);
+        console.error('Error fetching Progres:', error.message); // Log error
+        res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan pada server.'
+        });
     }
-}
+};
+
+
+
 
 const view = async (req, res) => {
     try {
@@ -61,11 +68,16 @@ const view = async (req, res) => {
 const create = async (req, res) => {
     try {
         const anggota = await Anggota.findAll();
-        res.render('dinas/proker/create', {anggota});
+
+        // Tambahkan variabel errors
+        const errors = {}; // Default kosong, diisi jika ada validasi nanti
+
+        res.render('dinas/proker/create', { anggota, errors });
     } catch (error) {
         console.error(error.message);
     }
-}
+};
+
 
 const store = async (req, res) => {
     let {
@@ -79,7 +91,29 @@ const store = async (req, res) => {
         anggaran,
         anggota
     } = req.body;
+
     try {
+        // Validasi input kosong
+        const errors = {};
+        if (!nama_proker) errors.nama_proker = 'Nama proker tidak boleh kosong.';
+        if (!kegiatan) errors.kegiatan = 'Kegiatan tidak boleh kosong.';
+        if (!tujuan) errors.tujuan = 'Tujuan tidak boleh kosong.';
+        if (!sasaran) errors.sasaran = 'Sasaran tidak boleh kosong.';
+        if (!target_waktu) errors.target_waktu = 'Target waktu tidak boleh kosong.';
+        if (!tempat) errors.tempat = 'Tempat tidak boleh kosong.';
+        if (!status) errors.status = 'Status tidak boleh kosong.';
+        if (!anggaran) errors.anggaran = 'Anggaran tidak boleh kosong.';
+        if (!anggota || anggota.length === 0) errors.anggota = 'Anggota tidak boleh kosong.';
+
+        if (Object.keys(errors).length > 0) {
+            const anggotaList = await Anggota.findAll(); // Fetch anggota list again
+            return res.render('dinas/proker/create', {
+                errors,
+                anggota: anggotaList,
+                formData: req.body // Mengirim kembali data yang diisi
+            });
+        }
+
         // Generate ID Dinas
         const generateProker = () => {
             const prefix = 'PRO-';
@@ -94,6 +128,7 @@ const store = async (req, res) => {
                 id_user
             }
         });
+
         const proker = await Proker.create({
             id_proker: generateProker(), // temporary id_proker
             nama_proker,
@@ -108,31 +143,30 @@ const store = async (req, res) => {
         });
 
         // Save anggota proker
-
-        // check if anggota is array
         if (!Array.isArray(anggota)) {
-            const anggotaArr = [];
-            anggotaArr.push(anggota);
-            anggota = anggotaArr;
+            anggota = [anggota]; // Convert single anggota to array
         }
-        anggota.forEach(async (id_anggota) => {
-            const anggota_proker = await Anggota_Proker.create({
+
+        await Promise.all(anggota.map(async (id_anggota) => {
+            await Anggota_Proker.create({
                 id_proker: proker.id_proker,
                 id_anggota,
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
-        });
+        }));
 
         if (!proker) {
             return res.redirect('/dinas/proker/create');
-        }else{
+        } else {
             return res.redirect('/dinas/proker');
         }
     } catch (error) {
         console.error(error.message);
+        return res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 const edit = async (req, res) => {
     try {
@@ -146,30 +180,56 @@ const edit = async (req, res) => {
                 as: 'dataAnggota'
             }
         });
-        res.render('dinas/proker/edit', {anggota,proker});
+        const errors = {}; // Default kosong, diisi jika ada validasi nanti
+
+        res.render('dinas/proker/edit', {anggota,proker,errors});
     } catch (error) {
         console.error(error.message);
     }
 }
 
 const update = async (req, res) => {
-    let {
-        nama_proker,
-        pj_proker,
-        kegiatan,
-        tujuan,
-        sasaran,
-        target_waktu,
-        tempat,
-        status,
-        anggaran,
-        anggota
-    } = req.body;
     try {
-        // save proker to database
+        const {
+            nama_proker,
+            kegiatan,
+            tujuan,
+            sasaran,
+            target_waktu,
+            tempat,
+            status,
+            anggaran,
+            anggota
+        } = req.body;
+
+        // Validasi input kosong
+        const errors = {};
+        if (!nama_proker) errors.nama_proker = 'Nama proker tidak boleh kosong.';
+        if (!kegiatan) errors.kegiatan = 'Kegiatan tidak boleh kosong.';
+        if (!tujuan) errors.tujuan = 'Tujuan tidak boleh kosong.';
+        if (!sasaran) errors.sasaran = 'Sasaran tidak boleh kosong.';
+        if (!target_waktu) errors.target_waktu = 'Target waktu tidak boleh kosong.';
+        if (!tempat) errors.tempat = 'Tempat tidak boleh kosong.';
+        if (!status) errors.status = 'Status tidak boleh kosong.';
+        if (!anggaran) errors.anggaran = 'Anggaran tidak boleh kosong.';
+        if (!anggota || anggota.length === 0) errors.anggota = 'Anggota tidak boleh kosong.';
+
+        if (Object.keys(errors).length > 0) {
+            const anggotaList = await Anggota.findAll(); // Fetch anggota list again
+            const proker = await Proker.findOne({
+                where: { id_proker: req.params.id },
+                include: {
+                    model: Anggota,
+                    as: 'dataAnggota'
+                }
+            });
+
+            return res.render('dinas/proker/edit', { anggota: anggotaList, proker, errors });
+        }
+
+        // Update proker
         const proker = await Proker.update({
             nama_proker,
-            pj_proker,
             kegiatan,
             tujuan,
             sasaran,
@@ -178,44 +238,27 @@ const update = async (req, res) => {
             status,
             anggaran,
         }, {
-            where: {
-                id_proker: req.params.id
-            }
+            where: { id_proker: req.params.id }
         });
 
-        // delete anggota proker
-        await Anggota_Proker.destroy({
-            where: {
-                id_proker: req.params.id
-            }
-        });
-
-        // check if anggota is array
-        if (!Array.isArray(anggota)) {
-            const anggotaArr = [];
-            anggotaArr.push(anggota);
-            anggota = anggotaArr;
-        }
-
-        // Save anggota proker
-        anggota.forEach(async (id_anggota) => {
-            const anggota_proker = await Anggota_Proker.create({
+        // Update anggota proker
+        await Anggota_Proker.destroy({ where: { id_proker: req.params.id } });
+        await Promise.all(anggota.map(async (id_anggota) => {
+            await Anggota_Proker.create({
                 id_proker: req.params.id,
                 id_anggota,
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
-        });
+        }));
 
-        if (!proker) {
-            return res.redirect('/dinas/proker/edit/' + req.params.id);
-        }else{
-            return res.redirect('/dinas/proker');
-        }
+        return res.redirect('/dinas/proker');
     } catch (error) {
         console.error(error.message);
+        return res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 const getIdUser = async (req, res) => {
     const token = req.cookies.token;
@@ -260,14 +303,14 @@ const dashboard = async (req, res) => {
                 id_dinas: dinas.id_dinas,
             }
         });
-        // get progress that related to proker
-        const progress = await Progress.findAll({
+        // get Progres that related to proker
+        const progress  = await Progress.findAll({
             where: {
                 id_proker: proker.map(proker => proker.id_proker)
             }
         });
 
-        res.render('dinas/index', {berjalan, belumTerlaksana, terlaksana, progress});
+        res.render('dinas/index', {berjalan, belumTerlaksana, terlaksana, progress });
     } catch (error) {
         console.error(error.message);
     }
@@ -293,13 +336,13 @@ const dashboardAdmin = async (req, res) => {
             }
         });
 
-        const progress = await Progress.findAll();
+        const Progres = await Progres.findAll();
 
         res.render('admin/dashboardAdmin', {
             berjalan: berjalan.length,  
             belumTerlaksana: belumTerlaksana.length, 
             terlaksana: terlaksana.length,  
-            progress: progress.length  
+            Progres: Progres.length  
         });
     } catch (error) {
         console.error(error.message);
@@ -321,7 +364,7 @@ const hapusProker = async (req, res) => {
         }
 
         // Cari semua Progres yang terkait dengan Proker
-        const progresList = await Progress.findAll({
+        const progresList = await Progres.findAll({
             where: { id_proker: proker.id_proker }
         });
 
@@ -340,7 +383,7 @@ const hapusProker = async (req, res) => {
         }
 
         // Hapus semua Progres dari database
-        await Progress.destroy({
+        await Progres.destroy({
             where: { id_proker: proker.id_proker }
         });
 

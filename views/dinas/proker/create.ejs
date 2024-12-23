@@ -1,5 +1,12 @@
 <%- include('../layout/sidebar')%>
 <div class="px-8 py-6 bg-white">
+    <% if (errors) { %>
+        <ul style="color: red;">
+            <% for (const key in errors) { %>
+                <li><%= errors[key] %></li>
+            <% } %>
+        </ul>
+    <% } %>
     <form method="post" action="/dinas/proker/create">
         <div class="form-control">
             <label class="label">
